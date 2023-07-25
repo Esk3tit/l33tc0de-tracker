@@ -1,10 +1,16 @@
+import { authModalState } from '@/atoms/authModalAtom';
 import React from 'react';
+import { useSetRecoilState } from 'recoil';
 
 type SignupProps = {
 
 };
 
 const Signup: React.FC<SignupProps> = () => {
+    const setAuthModalState = useSetRecoilState(authModalState);
+    const handleClick = () => {
+        setAuthModalState((prev) => ({...prev, mode: "login" }));
+    };
 
     return (
         <form className='space-y-6 px-6 pb-4'>
@@ -63,7 +69,7 @@ const Signup: React.FC<SignupProps> = () => {
             
             <div className='text-sm font-medium text-gray-300'>
                 Already have an account?{' '}
-                <a href='#' className='text-blue-700 hover:underline'>
+                <a href='#' className='text-blue-700 hover:underline' onClick={handleClick}>
                     Sign In
                 </a>
             </div>

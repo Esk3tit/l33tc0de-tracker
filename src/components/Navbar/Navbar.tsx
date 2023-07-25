@@ -1,3 +1,5 @@
+'use client'
+
 import { authModalState } from '@/atoms/authModalAtom';
 import Link from 'next/link';
 import React from 'react';
