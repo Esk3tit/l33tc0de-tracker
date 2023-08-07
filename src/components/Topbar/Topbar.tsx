@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '@/firebase/firebase';
 import Logout from '../Buttons/Logout';
@@ -22,7 +23,7 @@ const Topbar: React.FC<TopbarProps> = () => {
         <nav className='relative flex h-[50px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7'>
             <div className={`flex w-full items-center justify-between max-w-[1200px] mx-auto`}>
                 <Link href='/' className='h-[22px] flex-1'>
-                    <img src='/logo-full.png' alt='Logo' className='h-full' />
+                    <Image src='/logo-full.png' alt='Logo' height={100} width={100} />
                 </Link>
 
                 <div className='flex items-center space-x-4 flex-1 justify-end'>
