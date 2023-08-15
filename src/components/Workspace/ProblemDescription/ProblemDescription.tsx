@@ -50,9 +50,9 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem }) => {
 
                         {/* Problem Statement(paragraphs) */}
                         <div className='text-white text-sm'>
-                            {/* <div
+                            <div
                                 dangerouslySetInnerHTML={{ __html: problem.problemStatement }}
-                            /> */}
+                            />
                         </div>
 
                         {/* Examples */}

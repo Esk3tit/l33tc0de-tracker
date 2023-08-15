@@ -11,7 +11,6 @@ type WorkspaceProps = {
 };
 
 const Workspace:React.FC<WorkspaceProps> = ({ problem }) => {
-    console.log(problem);
     return <Split className='split' minSize={0}>
         <ProblemDescription problem={problem} />
         <div className='bg-dark-fill-2'>
