@@ -1,7 +1,46 @@
+'use client'
+
 import ProblemsTable from "@/components/ProblemsTable/ProblemsTable";
 import Topbar from "@/components/Topbar/Topbar";
+import { firestore } from "@/firebase/firebase";
+import { doc, setDoc } from "firebase/firestore";
+import React, { useState } from "react";
 
 export default function Home() {
+
+  const [inputs, setInputs] = useState({
+    id: "",
+    title: "",
+    difficulty: "",
+    category: "",
+    videoId: "",
+    link: "",
+    order: 0,
+    likes: 0,
+    dislikes: 0
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputs({
+      ...inputs,
+      [e.target.name]: e.target.value
+    })
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const newInputs = {
+      ...inputs,
+      order: Number(inputs.order)
+    }
+
+    await setDoc(doc(firestore, "problems", inputs.id), newInputs);
+    alert("Document successfully written!");
+  };
+
+  console.log(inputs);
+
   return (
     <main className="bg-dark-layer-2 min-h-screen">
       <Topbar />
@@ -35,6 +74,18 @@ export default function Home() {
           <ProblemsTable />
         </table>
       </div>
+
+      {/* TEMP FORM */}
+      <form className="p-6 flex flex-col max-w-sm gap-3" onSubmit={handleSubmit}>
+        <input onChange={handleInputChange} type="text" placeholder="problem id" name="id" />
+        <input onChange={handleInputChange} type="text" placeholder="title" name="title" />
+        <input onChange={handleInputChange} type="text" placeholder="difficulty" name="difficulty" />
+        <input onChange={handleInputChange} type="text" placeholder="category" name="category" />
+        <input onChange={handleInputChange} type="text" placeholder="videoId?" name="videoId" />
+        <input onChange={handleInputChange} type="text" placeholder="link?" name="link" />
+        <input onChange={handleInputChange} type="text" placeholder="order" name="order" />
+        <button type="submit" className="bg-white">Submit to Firestore DB</button>
+      </form>
     </main>
   )
 }
