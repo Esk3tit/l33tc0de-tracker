@@ -57,7 +57,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
                             Premium
                         </a>
                     </div>
-                    {problemPage && <Timer />}
+                    {user && problemPage && <Timer />}
                     {user ? (
                         <>
                             <div className='cursor-pointer group relative'>
