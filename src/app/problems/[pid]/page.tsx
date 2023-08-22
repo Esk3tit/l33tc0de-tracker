@@ -24,3 +24,9 @@ const ProblemPage:React.FC<ProblemPageProps> = ({ params }) => {
     </div>
 }
 export default ProblemPage;
+
+export async function generateStaticParams() {
+    return Object.keys(problems).map(pid => ({
+        pid
+    }));
+}
