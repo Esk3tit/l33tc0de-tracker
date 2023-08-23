@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PreferenceNav from './PreferenceNav/PreferenceNav';
 import Split from 'react-split';
 import CodeMirror from '@uiw/react-codemirror';
@@ -6,18 +6,89 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import { python } from '@codemirror/lang-python';
 import EditorFooter from './EditorFooter';
 import { Problem } from '@/utils/types/problem';
+import { auth, firestore } from '@/firebase/firebase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { toast } from 'react-toastify';
+import { usePathname } from 'next/navigation';
+import { problems } from '@/utils/problems';
+import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 
 type PlaygroundProps = {
     problem: Problem,
-    setSucess: React.Dispatch<React.SetStateAction<boolean>>
+    setSucess: React.Dispatch<React.SetStateAction<boolean>>,
+    setSolved: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess }) => {
+const options: any = { position: 'top-center', autoClose: 3000, theme: 'dark' };
 
+export interface ISettings {
+    fontSize: string;
+    settingsModalIsOpen: boolean;
+    dropdownIsOpen: boolean;
+}
+
+const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved }) => {
     const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
+    let [userCode, setUserCode] = useState<string>(problem.starterCode);
+    const [settings, setSettings] = useState<ISettings>({
+        fontSize: "16px",
+        settingsModalIsOpen: false,
+        dropdownIsOpen: false,
+    });
+    const [user] = useAuthState(auth);
+    const pathname = usePathname();
+    const pid: string = pathname.split("/")[2];
 
-    const handleSubmit = () => {
-        alert('Submit');
+    const handleSubmit = async () => {
+        if(!user) {
+            toast.error("You must be logged in to submit", options);
+            return;
+        }
+
+        // Oh right since code is in Python it won't work on JS stuff lol
+        try {
+            userCode = userCode.slice(userCode.indexOf(problem.starterFunctionName));
+            const cb = new Function(`return ${userCode}`)();
+            const handler = problems[pid].handlerFunction;
+
+            if (typeof handler === "function") {
+                const success = handler(cb);
+            
+                if(success) {
+                    toast.success("Correct! All tests passed!", options);
+                    setSucess(true);
+                    setTimeout(() => {
+                        setSucess(false);
+                    }, 4000);
+
+                    const userRef = doc(firestore, 'users', user.uid);
+                    await updateDoc(userRef, {
+                        solvedProblems: arrayUnion(pid)
+                    });
+                    setSolved(true);
+                }
+            }
+        } catch (error: any) {
+            if(error.message.startsWith("AssertionError")) {
+                toast.error("Incorrect! Some tests failed!", options);
+            } else {
+                toast.error(error.message, options);
+            }
+        }
+    }
+
+    useEffect(() => {
+        const code = localStorage.getItem(`code-${pid}`);
+        if(user) {
+            setUserCode(code ? JSON.parse(code) : problem.starterCode);
+        } else {
+            setUserCode(problem.starterCode);
+        }
+    }, [pid, user, problem.starterCode]);
+
+    const onChange = (value: string) => {
+        setUserCode(value);
+        localStorage.setItem(`code-${pid}`, JSON.stringify(value));
     }
 
     return (
@@ -27,8 +98,9 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess }) => {
             <Split className='h-[calc(100vh-94px)]' direction='vertical' sizes={[60, 40]} minSize={60}>
                 <div className="w-full overflow-auto">
                     <CodeMirror
-                        value={problem.starterCode}
+                        value={userCode}
                         theme={vscodeDark}
+                        onChange={onChange}
                         extensions={[python()]}
                         style={{fontSize: 16}}
                     />

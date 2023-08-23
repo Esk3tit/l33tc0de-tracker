@@ -1,5 +1,8 @@
+'use client'
+
 import Topbar from '@/components/Topbar/Topbar';
 import Workspace from '@/components/Workspace/Workspace';
+import useHasMounted from '@/hooks/useHasMounted';
 import { problems } from '@/utils/problems';
 import { Problem } from '@/utils/types/problem';
 import { notFound } from 'next/navigation';
@@ -10,6 +13,10 @@ type ProblemPageProps = {
 };
 
 const ProblemPage:React.FC<ProblemPageProps> = ({ params }) => {
+    const hasMounted = useHasMounted();
+
+    if (!hasMounted) return null;
+
     const { pid } = params;
     const problem: Problem = problems[pid];
 
