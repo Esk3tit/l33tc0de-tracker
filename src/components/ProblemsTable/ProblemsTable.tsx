@@ -6,9 +6,10 @@ import { AiFillYoutube } from 'react-icons/ai';
 import Link from 'next/link';
 import { IoClose } from 'react-icons/io5';
 import YouTube from 'react-youtube';
-import { collection, getDocs, orderBy, query } from 'firebase/firestore';
-import { firestore } from '@/firebase/firebase';
+import { collection, doc, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
+import { auth, firestore } from '@/firebase/firebase';
 import { DBProblem } from '@/utils/types/problem';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 type ProblemsTableProps = {
     setLoading: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,6 +22,7 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoading }) => {
         videoId: '',
     });
     const problems = useGetProblems(setLoading);
+    const solvedProblems = useGetSolvedProblems();
     const closeModal = () => {
         setYoutubePlayer({ isOpen: false, videoId: '' });
     };
@@ -43,7 +45,7 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoading }) => {
                     return (
                         <tr key={problem.id} className={`${idx % 2 === 1 ? 'bg-dark-layer-1' : ''}`}>
                             <th className='px-2 py-4 font-medium whitespace-nowrap text-dark-green-s'>
-                                <BsCheckCircle fontSize={18} width={18} />
+                                {solvedProblems.includes(problem.id) && <BsCheckCircle fontSize={18} width={18} />}
                             </th>
                             <td className='px-6 py-4'>
                                 {problem.link ? (
@@ -117,4 +119,27 @@ function useGetProblems(setLoading: React.Dispatch<React.SetStateAction<boolean>
     }, [setLoading]);
 
     return problems;
+}
+
+function useGetSolvedProblems() {
+    const [solvedProblems, setSolvedProblems] = useState<string[]>([]);
+    const [user] = useAuthState(auth);
+
+    useEffect(() => {
+        const getSolvedProblems = async () => {
+            const userRef = doc(firestore, 'users', user!.uid);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+                const data = userSnap.data();
+                if (data) {
+                    setSolvedProblems(data.solvedProblems);
+                }
+            }
+        };
+
+        if (user) getSolvedProblems();
+        if (!user) setSolvedProblems([]);
+    }, [user]);
+
+    return solvedProblems;
 }
