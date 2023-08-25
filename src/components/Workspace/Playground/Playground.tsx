@@ -28,6 +28,13 @@ export interface ISettings {
     dropdownIsOpen: boolean;
 }
 
+export interface ITabs {
+    id: number;
+    title: string;
+    code: string;
+    timestamp?: number;
+}
+
 const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved }) => {
     const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
     let [userCode, setUserCode] = useState<string>(problem.starterCode);
@@ -36,6 +43,12 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         fontSize: fontSize,
         settingsModalIsOpen: false,
         dropdownIsOpen: false,
+    });
+    const [tabs, setTabs] = useState<ITabs[]>([]);
+    const [activeTab, setActiveTab] = useState<ITabs>({
+        id: 0,
+        title: "Solution 1",
+        code: problem.starterCode
     });
     
     const [user] = useAuthState(auth);
@@ -80,23 +93,58 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         }
     }
 
+    const handleTabChange = (id: number) => {
+        const currTab = tabs.find(tab => tab.id === id);
+        setActiveTab(currTab!);
+        setUserCode(currTab!.code);
+    }
+
+    // Fetch all tabs but only the code from active tab (first tab by default)
+    // Might need to update dependency array if I can think of use case that would
+    // warrant refetching all tab data
+    // TODO: Add tab fetching from firestore for syncing if not in local storage LATER
     useEffect(() => {
-        const code = localStorage.getItem(`code-${pid}`);
+        const tabs = Object.keys(localStorage).filter(key => key.startsWith(`code-${pid}~`)).map(tab => {
+            const tabData = JSON.parse(localStorage.getItem(tab)!);
+            return {
+                id: +tabData.id,
+                title: tabData.title,
+                code: tabData.code,
+                timestamp: tabData.timestamp
+            }
+        });
+        // Sort tabs
+        tabs.sort((a, b) => a.timestamp - b.timestamp);
+
         if(user) {
-            setUserCode(code ? JSON.parse(code) : problem.starterCode);
+            const currTab = tabs.find(tab => tab.id === activeTab.id);
+            setUserCode(currTab && currTab.code ? currTab.code : problem.starterCode);
+            setTabs(tabs.length ? tabs : [{ id: 0, title: "Solution 1", code: problem.starterCode }]);
         } else {
             setUserCode(problem.starterCode);
+            setTabs([{ id: 0, title: "Solution 1", code: problem.starterCode }]);
         }
     }, [pid, user, problem.starterCode]);
 
     const onChange = (value: string) => {
         setUserCode(value);
-        localStorage.setItem(`code-${pid}`, JSON.stringify(value));
+        const tabData = {
+            id: activeTab.id,
+            title: activeTab && activeTab.title ? activeTab.title : `Solution ${activeTab.id + 1}`,
+            code: value,
+            timestamp: Date.now()
+        }
+        setTabs(prev => {
+            const index = prev.findIndex(tab => tab.id === activeTab.id);
+            prev[index] = tabData;
+            return prev;
+        });
+        localStorage.setItem(`code-${pid}~${activeTab.id}`, JSON.stringify(tabData));
     }
 
     return (
         <div className='flex flex-col bg-dark-layer-1 relative overflow-x-hidden'>
-            <PreferenceNav settings={settings} setSettings={setSettings} />
+            <PreferenceNav settings={settings} setSettings={setSettings} tabs={tabs} handleTabChange={handleTabChange} />
 
             <Split className='h-[calc(100vh-94px)]' direction='vertical' sizes={[60, 40]} minSize={60}>
                 <div className="w-full overflow-auto">
