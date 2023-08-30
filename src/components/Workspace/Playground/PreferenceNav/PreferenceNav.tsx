@@ -3,6 +3,7 @@ import { AiOutlineSetting, AiOutlineFullscreen, AiOutlineFullscreenExit } from '
 import { ISettings, ITabs } from '../Playground';
 import SettingsModal from '@/components/Modals/SettingsModal';
 import SolutionTab from '@/components/Buttons/SolutionTab';
+import { IoAdd } from 'react-icons/io5';
 
 type PreferenceNavProps = {
     settings: ISettings;
@@ -47,6 +48,13 @@ const PreferenceNav:React.FC<PreferenceNavProps> = ({ settings, setSettings, tab
 			{tabs.map(tab => (
 				<SolutionTab key={tab.id} id={tab.id} title={tab.title} handleTabChange={handleTabChange} />
 			))}
+			<button
+				type='button'
+				className='bg-transparent rounded-lg text-sm p-1.5 ml-2 inline-flex items-center hover:bg-gray-800 hover:text-white text-white'
+				onClick={() => (console.log('new tab'))}
+			>
+				<IoAdd className='h-5 w-5' />
+			</button>
 		</div>
 
 		<div className='flex items-center m-2'>

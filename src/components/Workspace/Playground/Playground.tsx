@@ -142,6 +142,29 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         localStorage.setItem(`code-${pid}~${activeTab.id}`, JSON.stringify(tabData));
     }
 
+    const addTab = () => {
+        const newTab = {
+            id: tabs.length,
+            title: `Solution ${tabs.length + 1}`,
+            code: problem.starterCode,
+            timestamp: Date.now()
+        }
+        setTabs(prev => [...prev, newTab]);
+        setActiveTab(newTab);
+        localStorage.setItem(`code-${pid}~${newTab.id}`, JSON.stringify(newTab));
+    }
+
+    const deleteTab = () => {
+        if(tabs.length === 1) {
+            toast.error("Cannot delete last tab", options);
+            return;
+        }
+        const newTabs = tabs.filter(tab => tab.id !== activeTab.id);
+        setTabs(newTabs);
+        setActiveTab(newTabs[newTabs.length - 1]);
+        localStorage.removeItem(`code-${pid}~${activeTab.id}`);
+    }
+
     return (
         <div className='flex flex-col bg-dark-layer-1 relative overflow-x-hidden'>
             <PreferenceNav settings={settings} setSettings={setSettings} tabs={tabs} handleTabChange={handleTabChange} />
