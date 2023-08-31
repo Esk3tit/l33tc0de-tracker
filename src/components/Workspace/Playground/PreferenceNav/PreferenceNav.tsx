@@ -9,10 +9,13 @@ type PreferenceNavProps = {
     settings: ISettings;
 	setSettings: React.Dispatch<React.SetStateAction<ISettings>>;
 	tabs: ITabs[];
-	handleTabChange: (id: number) => void;
+	handleTabChange: (id: string) => void;
+	addTab: () => void;
+	deleteTab: (event: any, id: string) => void;
+	activeTab: ITabs;
 };
 
-const PreferenceNav:React.FC<PreferenceNavProps> = ({ settings, setSettings, tabs, handleTabChange }) => {
+const PreferenceNav:React.FC<PreferenceNavProps> = ({ settings, setSettings, tabs, handleTabChange, addTab, deleteTab, activeTab }) => {
     
 	const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
 
@@ -46,12 +49,14 @@ const PreferenceNav:React.FC<PreferenceNavProps> = ({ settings, setSettings, tab
 	<div className='flex items-center justify-between bg-dark-layer-2 h-11 w-full'>
 		<div className='flex items-center text-white'>
 			{tabs.map(tab => (
-				<SolutionTab key={tab.id} id={tab.id} title={tab.title} handleTabChange={handleTabChange} />
+				<SolutionTab key={tab.id} id={tab.id} title={tab.title} handleTabChange={handleTabChange} deleteTab={deleteTab}
+					activeTab={activeTab}
+				/>
 			))}
 			<button
 				type='button'
-				className='bg-transparent rounded-lg text-sm p-1.5 ml-2 inline-flex items-center hover:bg-gray-800 hover:text-white text-white'
-				onClick={() => (console.log('new tab'))}
+				className='bg-transparent rounded-lg text-sm p-1.5 ml-1 inline-flex items-center hover:bg-gray-800 hover:text-white text-white'
+				onClick={() => addTab()}
 			>
 				<IoAdd className='h-5 w-5' />
 			</button>

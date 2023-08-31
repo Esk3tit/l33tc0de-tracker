@@ -10,9 +10,6 @@ import React, { useState } from "react";
 export default function Home() {
 
   const [loading, setLoading] = useState(true);
-  // const hasMounted = useHasMounted();
-
-  // if (!hasMounted) return null;
 
   const [inputs, setInputs] = useState({
     id: "",

@@ -13,6 +13,7 @@ import { usePathname } from 'next/navigation';
 import { problems } from '@/utils/problems';
 import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import useLocalStorage from '@/hooks/useLocalStorage';
+import { v4 as uuidv4 } from 'uuid';
 
 type PlaygroundProps = {
     problem: Problem,
@@ -29,7 +30,7 @@ export interface ISettings {
 }
 
 export interface ITabs {
-    id: number;
+    id: string;
     title: string;
     code: string;
     timestamp?: number;
@@ -45,16 +46,17 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         dropdownIsOpen: false,
     });
     const [tabs, setTabs] = useState<ITabs[]>([]);
-    const [activeTab, setActiveTab] = useState<ITabs>({
-        id: 0,
-        title: "Solution 1",
+    const [activeTab, setActiveTab] = useState<ITabs>(() => ({
+        id: uuidv4(),
+        title: "New Solution",
         code: problem.starterCode
-    });
+    }));
     
     const [user] = useAuthState(auth);
     const pathname = usePathname();
     const pid: string = pathname.split("/")[2];
 
+    // TODO: Change to local save sync to DB
     const handleSubmit = async () => {
         if(!user) {
             toast.error("You must be logged in to submit", options);
@@ -93,7 +95,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         }
     }
 
-    const handleTabChange = (id: number) => {
+    const handleTabChange = (id: string) => {
         const currTab = tabs.find(tab => tab.id === id);
         setActiveTab(currTab!);
         setUserCode(currTab!.code);
@@ -107,7 +109,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         const tabs = Object.keys(localStorage).filter(key => key.startsWith(`code-${pid}~`)).map(tab => {
             const tabData = JSON.parse(localStorage.getItem(tab)!);
             return {
-                id: +tabData.id,
+                id: tabData.id,
                 title: tabData.title,
                 code: tabData.code,
                 timestamp: tabData.timestamp
@@ -119,10 +121,10 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         if(user) {
             const currTab = tabs.find(tab => tab.id === activeTab.id);
             setUserCode(currTab && currTab.code ? currTab.code : problem.starterCode);
-            setTabs(tabs.length ? tabs : [{ id: 0, title: "Solution 1", code: problem.starterCode }]);
+            setTabs(tabs.length ? tabs : [{ id: uuidv4(), title: "New Solution", code: problem.starterCode }]);
         } else {
             setUserCode(problem.starterCode);
-            setTabs([{ id: 0, title: "Solution 1", code: problem.starterCode }]);
+            setTabs([{ id: uuidv4(), title: "New Solution", code: problem.starterCode }]);
         }
     }, [pid, user, problem.starterCode]);
 
@@ -130,7 +132,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         setUserCode(value);
         const tabData = {
             id: activeTab.id,
-            title: activeTab && activeTab.title ? activeTab.title : `Solution ${activeTab.id + 1}`,
+            title: activeTab.title,
             code: value,
             timestamp: Date.now()
         }
@@ -142,32 +144,65 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         localStorage.setItem(`code-${pid}~${activeTab.id}`, JSON.stringify(tabData));
     }
 
+    const generateNewTabTitle = () => {
+        const defaultNamedTabs = tabs.filter(tab => tab.title.startsWith("New Solution"));
+
+        if (defaultNamedTabs.length === 0) {
+            return "New Solution";
+        }
+
+        const numbers = defaultNamedTabs.map(tab => {
+            const match = tab.title.match(/\((\d+)\)/);
+            return match ? parseInt(match[1], 10) : 0;
+        });
+
+        const newNumber = Math.max(...numbers) + 1;
+
+        return `New Solution (${newNumber})`;
+    };
+
     const addTab = () => {
         const newTab = {
-            id: tabs.length,
-            title: `Solution ${tabs.length + 1}`,
+            id: uuidv4(),
+            title: generateNewTabTitle(),
             code: problem.starterCode,
             timestamp: Date.now()
         }
         setTabs(prev => [...prev, newTab]);
         setActiveTab(newTab);
+        setUserCode(newTab.code);
         localStorage.setItem(`code-${pid}~${newTab.id}`, JSON.stringify(newTab));
     }
 
-    const deleteTab = () => {
+    const deleteTab = (event: any, id: string) => {
+        // Prevents the event from bubbling up and also registering click as active tab
+        // since the close button is on the tab itself which can be clicked on to set as active tab
+        event.stopPropagation();
         if(tabs.length === 1) {
             toast.error("Cannot delete last tab", options);
             return;
         }
-        const newTabs = tabs.filter(tab => tab.id !== activeTab.id);
+        const deleteIndex = tabs.findIndex(tab => tab.id === id);
+        const newTabs = tabs.filter(tab => tab.id !== id);
         setTabs(newTabs);
-        setActiveTab(newTabs[newTabs.length - 1]);
-        localStorage.removeItem(`code-${pid}~${activeTab.id}`);
+        
+        // If the deleted tab is the active tab, switch to the next tab to the right
+        if (id === activeTab.id) {
+            // If the deleted tab is the last tab, switch to the tab immediately to its left
+            // Otherwise, switch to the tab immediately to its right
+            const newActiveIndex = deleteIndex === newTabs.length ? deleteIndex - 1 : deleteIndex;
+            setActiveTab(newTabs[newActiveIndex]);
+            setUserCode(newTabs[newActiveIndex].code);
+        }
+        
+        localStorage.removeItem(`code-${pid}~${id}`);
     }
 
     return (
         <div className='flex flex-col bg-dark-layer-1 relative overflow-x-hidden'>
-            <PreferenceNav settings={settings} setSettings={setSettings} tabs={tabs} handleTabChange={handleTabChange} />
+            <PreferenceNav settings={settings} setSettings={setSettings} tabs={tabs} handleTabChange={handleTabChange}
+                addTab={addTab} deleteTab={deleteTab} activeTab={activeTab}
+            />
 
             <Split className='h-[calc(100vh-94px)]' direction='vertical' sizes={[60, 40]} minSize={60}>
                 <div className="w-full overflow-auto">
