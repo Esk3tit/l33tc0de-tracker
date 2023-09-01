@@ -36,22 +36,14 @@ export interface ITabs {
     timestamp: number;
 }
 
-export interface FirestoreTabs {
-    id: string;
+export interface FirestoreTabs extends ITabs {
     uid: string;
     pid: string;
-    title: string;
-    code: string;
-    timestamp: number;
 }
 
-export interface UnifiedTabs {
-    id: string;
+export interface UnifiedTabs extends ITabs {
     uid?: string;
     pid?: string;
-    title: string;
-    code: string;
-    timestamp: number;
 }
 
 export interface LocalStorageMap {
@@ -225,7 +217,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
 
         mergeSyncData().then(mergedTabs => {
             if(user) {
-                const currTab = mergedTabs.find(tab => tab.id === activeTab.id);
+                const currTab: ITabs | undefined = mergedTabs.find(tab => tab.id === activeTab.id);
                 setUserCode(currTab && currTab.code ? currTab.code : problem.starterCode);
                 setTabs(mergedTabs.length ? mergedTabs : [defaultTab]);
             } else {
