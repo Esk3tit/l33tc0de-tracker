@@ -11,7 +11,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast } from 'react-toastify';
 import { usePathname } from 'next/navigation';
 import { problems } from '@/utils/problems';
-import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where, writeBatch } from 'firebase/firestore';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -33,10 +33,33 @@ export interface ITabs {
     id: string;
     title: string;
     code: string;
-    timestamp?: number;
+    timestamp: number;
+}
+
+export interface FirestoreTabs {
+    id: string;
+    uid: string;
+    pid: string;
+    title: string;
+    code: string;
+    timestamp: number;
+}
+
+export interface UnifiedTabs {
+    id: string;
+    uid?: string;
+    pid?: string;
+    title: string;
+    code: string;
+    timestamp: number;
+}
+
+export interface LocalStorageMap {
+    [key: string]: UnifiedTabs;
 }
 
 const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved }) => {
+    const defaultTab = { id: uuidv4(), title: "New Solution", code: problem.starterCode, timestamp: Date.now() };
     const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
     let [userCode, setUserCode] = useState<string>(problem.starterCode);
     const [fontSize, setFontSize] = useLocalStorage("font-size", "16px");
@@ -46,15 +69,38 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         dropdownIsOpen: false,
     });
     const [tabs, setTabs] = useState<ITabs[]>([]);
-    const [activeTab, setActiveTab] = useState<ITabs>(() => ({
-        id: uuidv4(),
-        title: "New Solution",
-        code: problem.starterCode
-    }));
+    const [activeTab, setActiveTab] = useState<ITabs>(() => (defaultTab));
     
     const [user] = useAuthState(auth);
     const pathname = usePathname();
     const pid: string = pathname.split("/")[2];
+
+    // Get tabs from local storage
+    const getTabsFromLocalStorage = (): UnifiedTabs[] => {
+        const tabs: UnifiedTabs[] = Object.keys(localStorage).filter(key => key.startsWith(`code-${pid}~`)).map(tab => {
+            const tabData = JSON.parse(localStorage.getItem(tab)!);
+            return {
+                id: tabData.id,
+                uid: user ? user.uid : undefined,
+                pid: pid,
+                title: tabData.title,
+                code: tabData.code,
+                timestamp: tabData.timestamp
+            }
+        });
+        // Sort tabs
+        tabs.sort((a, b) => a.timestamp - b.timestamp);
+        return tabs;
+    }
+
+    // Get tabs from firebase
+    const getTabsFromFirebase = async (): Promise<UnifiedTabs[]> => {
+        // Tabs in tabs collection have user id to identify which tabs belong to which user
+        const q = query(collection(firestore, "tabs"), where("uid", "==", user!.uid), where("pid", "==", pid));
+        const querySnapshot = await getDocs(q);
+        const tabs = querySnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as UnifiedTabs));
+        return tabs;
+    }
 
     // TODO: Change to local save sync to DB
     const handleSubmit = async () => {
@@ -101,31 +147,92 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         setUserCode(currTab!.code);
     }
 
-    // Fetch all tabs but only the code from active tab (first tab by default)
-    // Might need to update dependency array if I can think of use case that would
-    // warrant refetching all tab data
-    // TODO: Add tab fetching from firestore for syncing if not in local storage LATER
-    useEffect(() => {
-        const tabs = Object.keys(localStorage).filter(key => key.startsWith(`code-${pid}~`)).map(tab => {
-            const tabData = JSON.parse(localStorage.getItem(tab)!);
-            return {
-                id: tabData.id,
-                title: tabData.title,
-                code: tabData.code,
-                timestamp: tabData.timestamp
+    const mergeTabsBasedOnTimestamp = (localStorageTabs: UnifiedTabs[], firestoreTabs: UnifiedTabs[]): UnifiedTabs[] => {
+        const mergedTabs: UnifiedTabs[] = [];
+        const localStorageMap: LocalStorageMap = {};
+
+        // Create a map for local storage tabs
+        localStorageTabs.forEach(tab => {
+            localStorageMap[tab.id] = tab;
+        });
+
+        // Merge based on timestamp for firestore tabs that exist in local storage
+        firestoreTabs.forEach(firestoreTab => {
+            const localStorageTab = localStorageMap[firestoreTab.id];
+
+            if (localStorageTab) {
+                // If the tab exists in both Firestore and local storage, compare timestamps
+                // Firestore is source of truth, so if equal then use Firestore
+                if (firestoreTab.timestamp >= localStorageTab.timestamp) {
+                    mergedTabs.push(firestoreTab);
+                } else {
+                    mergedTabs.push(localStorageTab);
+                }
+                // Remove the tab from localStorageMap so we don't process it again
+                delete localStorageMap[firestoreTab.id];
+            } else {
+                // If the tab exists only in Firestore, add it to the merged list
+                mergedTabs.push(firestoreTab);
             }
         });
-        // Sort tabs
-        tabs.sort((a, b) => a.timestamp - b.timestamp);
 
-        if(user) {
-            const currTab = tabs.find(tab => tab.id === activeTab.id);
-            setUserCode(currTab && currTab.code ? currTab.code : problem.starterCode);
-            setTabs(tabs.length ? tabs : [{ id: uuidv4(), title: "New Solution", code: problem.starterCode }]);
-        } else {
-            setUserCode(problem.starterCode);
-            setTabs([{ id: uuidv4(), title: "New Solution", code: problem.starterCode }]);
+        // Add any remaining tabs that exist only in local storage
+        Object.values(localStorageMap).forEach(localStorageTab => {
+            mergedTabs.push(localStorageTab);
+        });
+
+        return mergedTabs;
+    }
+
+    const updateTabsInLocalStorage = (tabs: UnifiedTabs[]) => {
+        tabs.forEach(tab => {
+            const tabData: ITabs = {
+                id: tab.id,
+                title: tab.title,
+                code: tab.code,
+                timestamp: tab.timestamp
+            }
+            localStorage.setItem(`code-${pid}~${tabData.id}`, JSON.stringify(tabData));
+        });
+    }
+
+    const updateTabsInFirestore = async (tabs: UnifiedTabs[]) => {
+        const batch = writeBatch(firestore);
+
+        tabs.forEach(tab => {
+            const tabRef = doc(firestore, 'tabs', tab.id);
+            batch.set(tabRef, tab);
+        });
+
+        await batch.commit();
+    }
+
+    // Fetch all tabs but only the code from active tab (first tab by default)
+    useEffect(() => {
+        const mergeSyncData = async () => {
+            const localStorageTabs = getTabsFromLocalStorage();
+            const firestoreTabs = await getTabsFromFirebase();
+
+            const mergedTabs = mergeTabsBasedOnTimestamp(localStorageTabs, firestoreTabs);
+
+            // Update firestore and local storage with merged tabs
+            if(user) {
+                await updateTabsInFirestore(mergedTabs);
+                updateTabsInLocalStorage(mergedTabs);
+            }
+            return mergedTabs;
         }
+
+        mergeSyncData().then(mergedTabs => {
+            if(user) {
+                const currTab = mergedTabs.find(tab => tab.id === activeTab.id);
+                setUserCode(currTab && currTab.code ? currTab.code : problem.starterCode);
+                setTabs(mergedTabs.length ? mergedTabs : [defaultTab]);
+            } else {
+                setUserCode(problem.starterCode);
+                setTabs([defaultTab]);
+            }
+        });
     }, [pid, user, problem.starterCode]);
 
     const onChange = (value: string) => {
