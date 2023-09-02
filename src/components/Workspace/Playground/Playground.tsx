@@ -33,6 +33,7 @@ export interface ITabs {
     id: string;
     title: string;
     code: string;
+    deleted: boolean;
     timestamp: number;
 }
 
@@ -51,7 +52,7 @@ export interface LocalStorageMap {
 }
 
 const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved }) => {
-    const defaultTab = { id: uuidv4(), title: "New Solution", code: problem.starterCode, timestamp: Date.now() };
+    const defaultTab = { id: uuidv4(), title: "New Solution", code: problem.starterCode, deleted: false, timestamp: Date.now() };
     const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
     let [userCode, setUserCode] = useState<string>(problem.starterCode);
     const [fontSize, setFontSize] = useLocalStorage("font-size", "16px");
@@ -77,6 +78,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
                 pid: pid,
                 title: tabData.title,
                 code: tabData.code,
+                deleted: tabData.deleted,
                 timestamp: tabData.timestamp
             }
         });
@@ -154,8 +156,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
 
             if (localStorageTab) {
                 // If the tab exists in both Firestore and local storage, compare timestamps
-                // Firestore is source of truth, so if equal then use Firestore
-                if (firestoreTab.timestamp >= localStorageTab.timestamp) {
+                if (firestoreTab.timestamp >= localStorageTab.timestamp || (firestoreTab.deleted && !localStorageTab.deleted)) {
                     mergedTabs.push(firestoreTab);
                 } else {
                     mergedTabs.push(localStorageTab);
@@ -182,6 +183,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
                 id: tab.id,
                 title: tab.title,
                 code: tab.code,
+                deleted: tab.deleted,
                 timestamp: tab.timestamp
             }
             localStorage.setItem(`code-${pid}~${tabData.id}`, JSON.stringify(tabData));
@@ -233,6 +235,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
             id: activeTab.id,
             title: activeTab.title,
             code: value,
+            deleted: activeTab.deleted,
             timestamp: Date.now()
         }
         setTabs(prev => {
@@ -265,6 +268,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
             id: uuidv4(),
             title: generateNewTabTitle(),
             code: problem.starterCode,
+            deleted: false,
             timestamp: Date.now()
         }
         setTabs(prev => [...prev, newTab]);
@@ -282,19 +286,30 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
             return;
         }
         const deleteIndex = tabs.findIndex(tab => tab.id === id);
-        const newTabs = tabs.filter(tab => tab.id !== id);
+
+        // Update deleted flag in tabs
+        const updatedTab = {
+            ...tabs[deleteIndex],
+            deleted: true,
+            timestamp: Date.now()
+        }
+
+        // Replace tab with updated tab
+        const newTabs = [...tabs];
+        newTabs[deleteIndex] = updatedTab;
         setTabs(newTabs);
         
         // If the deleted tab is the active tab, switch to the next tab to the right
         if (id === activeTab.id) {
             // If the deleted tab is the last tab, switch to the tab immediately to its left
             // Otherwise, switch to the tab immediately to its right
-            const newActiveIndex = deleteIndex === newTabs.length ? deleteIndex - 1 : deleteIndex;
+            const newActiveIndex = deleteIndex === newTabs.length - 1 ? deleteIndex - 1 : deleteIndex + 1;
             setActiveTab(newTabs[newActiveIndex]);
             setUserCode(newTabs[newActiveIndex].code);
         }
         
-        localStorage.removeItem(`code-${pid}~${id}`);
+        // Update the local storage to reflect the soft delete
+        localStorage.setItem(`code-${pid}~${id}`, JSON.stringify(updatedTab));
     }
 
     return (
