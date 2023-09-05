@@ -10,7 +10,6 @@ import { auth, firestore } from '@/firebase/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast } from 'react-toastify';
 import { usePathname } from 'next/navigation';
-import { problems } from '@/utils/problems';
 import { arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where, writeBatch } from 'firebase/firestore';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,6 +21,8 @@ type PlaygroundProps = {
 };
 
 const options: any = { position: 'top-center', autoClose: 3000, theme: 'dark' };
+const SYNC_INTERVAL = 300000; // 5 minutes
+const NOTIFICATION_OFFSET = 10000; // 10 seconds
 
 export interface ISettings {
     fontSize: string;
@@ -37,14 +38,9 @@ export interface ITabs {
     timestamp: number;
 }
 
-export interface FirestoreTabs extends ITabs {
+export interface UnifiedTabs extends ITabs {
     uid: string;
     pid: string;
-}
-
-export interface UnifiedTabs extends ITabs {
-    uid?: string;
-    pid?: string;
 }
 
 export interface LocalStorageMap {
@@ -74,7 +70,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
             const tabData = JSON.parse(localStorage.getItem(tab)!);
             return {
                 id: tabData.id,
-                uid: user ? user.uid : undefined,
+                uid: user!.uid,
                 pid: pid,
                 title: tabData.title,
                 code: tabData.code,
@@ -96,36 +92,20 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         return tabs;
     }
 
-    // TODO: Change to local save sync to DB
-    const handleSubmit = async () => {
+    const handleSaveSync = async () => {
         if(!user) {
-            toast.error("You must be logged in to submit", options);
+            toast.warning("You must be logged in to save and sync with the cloud.", options);
             return;
         }
 
-        // Oh right since code is in Python it won't work on JS stuff lol
         try {
-            userCode = userCode.slice(userCode.indexOf(problem.starterFunctionName));
-            const cb = new Function(`return ${userCode}`)();
-            const handler = problems[pid].handlerFunction;
-
-            if (typeof handler === "function") {
-                const success = handler(cb);
-            
-                if(success) {
-                    toast.success("Correct! All tests passed!", options);
-                    setSucess(true);
-                    setTimeout(() => {
-                        setSucess(false);
-                    }, 4000);
-
-                    const userRef = doc(firestore, 'users', user.uid);
-                    await updateDoc(userRef, {
-                        solvedProblems: arrayUnion(pid)
-                    });
-                    setSolved(true);
+            mergeSyncData().then(mergedTabs => {
+                if(mergedTabs && mergedTabs.length) {
+                    const currTab: ITabs | undefined = mergedTabs.find(tab => tab.id === activeTab.id);
+                    setUserCode(currTab && currTab.code ? currTab.code : problem.starterCode);
+                    setTabs(mergedTabs);
                 }
-            }
+            });
         } catch (error: any) {
             if(error.message.startsWith("AssertionError")) {
                 toast.error("Incorrect! Some tests failed!", options);
@@ -177,7 +157,8 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         return mergedTabs;
     }
 
-    const updateTabsInLocalStorage = (tabs: UnifiedTabs[]) => {
+    const updateTabsInLocalStorage = (tabs: UnifiedTabs[], expiredTabIds: string[]) => {
+        // Set/save tabs in local storage
         tabs.forEach(tab => {
             const tabData: ITabs = {
                 id: tab.id,
@@ -188,40 +169,94 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
             }
             localStorage.setItem(`code-${pid}~${tabData.id}`, JSON.stringify(tabData));
         });
+
+        // Clear expired tabs from local storage
+        expiredTabIds.forEach(tabId => {
+            localStorage.removeItem(`code-${pid}~${tabId}`);
+        });
     }
 
-    const updateTabsInFirestore = async (tabs: UnifiedTabs[]) => {
+    const updateTabsInFirestore = async (tabs: UnifiedTabs[], expiredTabIds: string[]) => {
         const batch = writeBatch(firestore);
 
+        // Save tabs in firestore
         tabs.forEach(tab => {
             const tabRef = doc(firestore, 'tabs', tab.id);
             batch.set(tabRef, tab);
         });
 
+        // Clear expired tabs from firestore
+        expiredTabIds.forEach(tabId => {
+            const tabRef = doc(firestore, 'tabs', tabId);
+            batch.delete(tabRef);
+        });
+
         await batch.commit();
     }
 
-    // Fetch all tabs but only the code from active tab (first tab by default)
-    useEffect(() => {
-        const mergeSyncData = async () => {
-            const localStorageTabs = getTabsFromLocalStorage();
-            const firestoreTabs = await getTabsFromFirebase();
-
-            const mergedTabs = mergeTabsBasedOnTimestamp(localStorageTabs, firestoreTabs);
-
-            // Update firestore and local storage with merged tabs
-            if(user) {
-                await updateTabsInFirestore(mergedTabs);
-                updateTabsInLocalStorage(mergedTabs);
-            }
-            return mergedTabs;
+    const mergeSyncData = async () => {
+        if (!user) {
+            toast.warning("You must be logged in to save and sync with the cloud.", options);
+            return;
         }
 
-        mergeSyncData().then(mergedTabs => {
+        const localStorageTabs = getTabsFromLocalStorage();
+        const firestoreTabs = await getTabsFromFirebase();
+
+        let mergedTabs = mergeTabsBasedOnTimestamp(localStorageTabs, firestoreTabs);
+
+        // Clean up expired tabs
+        const currTime = Date.now();
+        const threshold = 30 * 1000; // 30 seconds
+        const expiredTabs: string[] = [];
+
+        mergedTabs = mergedTabs.filter(tab => {
+            // If soft deleted tab is older than threshold, remove it
+            if (tab.deleted && (currTime - tab.timestamp > threshold)) {
+                expiredTabs.push(tab.id);
+                return false;
+            }
+            return true;
+        });
+
+        // Update firestore and local storage with merged tabs
+        await updateTabsInFirestore(mergedTabs, expiredTabs);
+        updateTabsInLocalStorage(mergedTabs, expiredTabs);
+        toast.success("Tabs successfully saved and synced to the cloud!", options);
+        return mergedTabs;
+    }
+
+    // Set up intervals
+    useEffect(() => {
+        const syncInterval = setInterval(async () => {
             if(user) {
+                // Notify user 10 secs before sync
+                setTimeout(() => {
+                    toast.info("Syncing tabs with the cloud in 10 seconds...", options);
+                }, SYNC_INTERVAL - NOTIFICATION_OFFSET);
+
+                mergeSyncData().then(mergedTabs => {
+                    if(mergedTabs && mergedTabs.length) {
+                        const currTab: ITabs | undefined = mergedTabs.find(tab => tab.id === activeTab.id);
+                        setUserCode(currTab && currTab.code ? currTab.code : problem.starterCode);
+                        setTabs(mergedTabs);
+                    }
+                });;
+            }
+        }, SYNC_INTERVAL);
+
+        return () => {
+            clearInterval(syncInterval)
+        };
+    }, []);
+
+    // Fetch all tabs but only the code from active tab (first tab by default)
+    useEffect(() => {
+        mergeSyncData().then(mergedTabs => {
+            if(user && mergedTabs && mergedTabs.length) {
                 const currTab: ITabs | undefined = mergedTabs.find(tab => tab.id === activeTab.id);
                 setUserCode(currTab && currTab.code ? currTab.code : problem.starterCode);
-                setTabs(mergedTabs.length ? mergedTabs : [defaultTab]);
+                setTabs(mergedTabs);
             } else {
                 setUserCode(problem.starterCode);
                 setTabs([defaultTab]);
@@ -243,6 +278,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
             prev[index] = tabData;
             return prev;
         });
+
         localStorage.setItem(`code-${pid}~${activeTab.id}`, JSON.stringify(tabData));
     }
 
@@ -281,7 +317,8 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         // Prevents the event from bubbling up and also registering click as active tab
         // since the close button is on the tab itself which can be clicked on to set as active tab
         event.stopPropagation();
-        if(tabs.length === 1) {
+        const nonDeletedTabs = tabs.filter(tab => !tab.deleted);
+        if(nonDeletedTabs.length === 1) {
             toast.error("Cannot delete last tab", options);
             return;
         }
@@ -368,7 +405,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
                     </div>
                 </div>
             </Split>
-            <EditorFooter handleSubmit={handleSubmit} />
+            <EditorFooter handleSaveSync={handleSaveSync} />
         </div>
     )
 }
