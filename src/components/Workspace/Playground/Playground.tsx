@@ -48,7 +48,7 @@ export interface LocalStorageMap {
 }
 
 const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved }) => {
-    const defaultTab = { id: uuidv4(), title: "New Solution", code: problem.starterCode, deleted: false, timestamp: Date.now() };
+    const defaultTab = { id: uuidv4(), title: "New Solution (1)", code: problem.starterCode, deleted: false, timestamp: Date.now() };
     const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
     let [userCode, setUserCode] = useState<string>(problem.starterCode);
     const [fontSize, setFontSize] = useLocalStorage("font-size", "16px");
@@ -60,7 +60,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
     const [tabs, setTabs] = useState<ITabs[]>([]);
     const [activeTab, setActiveTab] = useState<ITabs>(() => (defaultTab));
     
-    const [user] = useAuthState(auth);
+    const [user, loading] = useAuthState(auth);
     const pathname = usePathname();
     const pid: string = pathname.split("/")[2];
 
@@ -78,8 +78,6 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
                 timestamp: tabData.timestamp
             }
         });
-        // Sort tabs
-        tabs.sort((a, b) => a.timestamp - b.timestamp);
         return tabs;
     }
 
@@ -93,11 +91,6 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
     }
 
     const handleSaveSync = async () => {
-        if(!user) {
-            toast.warning("You must be logged in to save and sync with the cloud.", options);
-            return;
-        }
-
         try {
             mergeSyncData().then(mergedTabs => {
                 if(mergedTabs && mergedTabs.length) {
@@ -195,7 +188,10 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
     }
 
     const mergeSyncData = async () => {
-        if (!user) {
+        if(loading) {
+            toast.info("Logging in...", options);
+            return;
+        } else if(!user) {
             toast.warning("You must be logged in to save and sync with the cloud.", options);
             return;
         }
@@ -254,12 +250,14 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
     useEffect(() => {
         mergeSyncData().then(mergedTabs => {
             if(user && mergedTabs && mergedTabs.length) {
-                const currTab: ITabs | undefined = mergedTabs.find(tab => tab.id === activeTab.id);
-                setUserCode(currTab && currTab.code ? currTab.code : problem.starterCode);
+                // Sort tabs
+                mergedTabs.sort((a, b) => a.timestamp - b.timestamp);
+                const currTab: ITabs = mergedTabs[0];
+                setUserCode(currTab.code);
                 setTabs(mergedTabs);
-            } else {
-                setUserCode(problem.starterCode);
-                setTabs([defaultTab]);
+                setActiveTab(currTab);
+            } else if (!loading) {
+                addTab();
             }
         });
     }, [pid, user, problem.starterCode]);
@@ -286,7 +284,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         const defaultNamedTabs = tabs.filter(tab => tab.title.startsWith("New Solution"));
 
         if (defaultNamedTabs.length === 0) {
-            return "New Solution";
+            return "New Solution (1)";
         }
 
         const numbers = defaultNamedTabs.map(tab => {
