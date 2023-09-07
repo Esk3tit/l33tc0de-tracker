@@ -29,6 +29,7 @@ body {
 /* dark  scrollbar */
 ::-webkit-scrollbar {
 	width: 0.5rem;
+	height: 3px;
 }
 
 ::-webkit-scrollbar-track {
@@ -38,6 +39,12 @@ body {
 ::-webkit-scrollbar-thumb {
 	background: #4d4d4d;
 }
+
+/* Firefox scrollbar styles */
+.tabs-scrollbar {
+	scrollbar-width: thin;
+	scrollbar-color: #4d4d4d #282828;
+  }
 
 /* CODE EDITOR*/
 .cm-scroller,

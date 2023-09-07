@@ -317,7 +317,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         event.stopPropagation();
         const nonDeletedTabs = tabs.filter(tab => !tab.deleted);
         if(nonDeletedTabs.length === 1) {
-            toast.error("Cannot delete last tab", options);
+            toast.error("Cannot delete last tab!", options);
             return;
         }
         const deleteIndex = tabs.findIndex(tab => tab.id === id);
@@ -336,15 +336,41 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         
         // If the deleted tab is the active tab, switch to the next tab to the right
         if (id === activeTab.id) {
-            // If the deleted tab is the last tab, switch to the tab immediately to its left
+            // Find the index of the deleted tab in the list of non-deleted tabs
+            const deleteIndexInNonDeleted = nonDeletedTabs.findIndex(tab => tab.id === id);
+
+            // If the deleted tab is the last non-deleted tab, switch to the tab immediately to its left
             // Otherwise, switch to the tab immediately to its right
-            const newActiveIndex = deleteIndex === newTabs.length - 1 ? deleteIndex - 1 : deleteIndex + 1;
-            setActiveTab(newTabs[newActiveIndex]);
-            setUserCode(newTabs[newActiveIndex].code);
+            const newActiveIndex = deleteIndexInNonDeleted === nonDeletedTabs.length - 1 ? deleteIndexInNonDeleted - 1 : deleteIndexInNonDeleted + 1;
+
+            setActiveTab(nonDeletedTabs[newActiveIndex]);
+            setUserCode(nonDeletedTabs[newActiveIndex].code);
         }
         
         // Update the local storage to reflect the soft delete
         localStorage.setItem(`code-${pid}~${id}`, JSON.stringify(updatedTab));
+
+        // Show undo toast for 15 seconds
+        toast.info("Tab deleted! Click this toast to undo.", {
+            ...options,
+            autoClose: 15000,
+            onClick: () => {
+                // Create a new object with the updated properties
+                const restoredTab = {
+                    ...updatedTab,
+                    deleted: false,
+                    timestamp: Date.now()
+                };
+
+                // Create a new array with the updated tab
+                const restoredTabs = [...newTabs];
+                restoredTabs[deleteIndex] = restoredTab;
+
+                // Update the state and local storage
+                setTabs(restoredTabs);
+                localStorage.setItem(`code-${pid}~${id}`, JSON.stringify(restoredTab));
+            },
+        });
     }
 
     return (

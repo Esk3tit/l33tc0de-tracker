@@ -47,7 +47,7 @@ const PreferenceNav:React.FC<PreferenceNavProps> = ({ settings, setSettings, tab
 
     return (
 	<div className='flex items-center justify-between bg-dark-layer-2 h-11 w-full'>
-		<div className='flex items-center text-white'>
+		<div className='flex items-center text-white overflow-x-auto whitespace-nowrap tabs-scrollbar'>
 			{tabs.filter(tab => !tab.deleted).map(tab => (
 				<SolutionTab key={tab.id} id={tab.id} title={tab.title} handleTabChange={handleTabChange} deleteTab={deleteTab}
 					activeTab={activeTab}
