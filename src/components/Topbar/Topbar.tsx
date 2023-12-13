@@ -14,6 +14,7 @@ import Timer from '../Timer/Timer';
 import { usePathname, useRouter } from 'next/navigation';
 import { problems } from '@/utils/problems';
 import { Problem } from '@/utils/types/problem';
+import useGetUserData from '@/hooks/useGetUserData';
 
 type TopbarProps = {
     problemPage?: boolean;
@@ -22,6 +23,7 @@ type TopbarProps = {
 const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
 
     const [user] = useAuthState(auth);
+    const { role } = useGetUserData();
 
     const setAuthModalState = useSetRecoilState(authModalState);
     const pathname = usePathname();
@@ -88,7 +90,11 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
                     {user && problemPage && <Timer />}
                     {user ? (
                         <>
-                            <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Dashboard</button>
+                            {role === 'admin' && (
+                                <Link href='/dashboard'>
+                                    <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Dashboard</button>
+                                </Link>
+                            )}
                             <div className='cursor-pointer group relative'>
                                 <img src='/avatar.png' alt='user profile avatar' className='h-8 w-8 rounded-full' />
                                 <div

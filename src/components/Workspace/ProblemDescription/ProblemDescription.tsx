@@ -3,7 +3,7 @@ import RectangleSkeleton from '@/components/Skeletons/RectangleSkeleton';
 import { auth, firestore } from '@/firebase/firebase';
 import { DBProblem, Problem } from '@/utils/types/problem';
 import { arrayRemove, arrayUnion, doc, getDoc, runTransaction, updateDoc } from 'firebase/firestore';
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { AiFillLike, AiFillDislike, AiOutlineLoading3Quarters, AiFillStar } from 'react-icons/ai';
 import { BsCheck2Circle } from 'react-icons/bs';
