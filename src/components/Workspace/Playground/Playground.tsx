@@ -10,7 +10,7 @@ import { auth, firestore } from '@/firebase/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { toast } from 'react-toastify';
 import { usePathname } from 'next/navigation';
-import { arrayUnion, collection, doc, getDoc, getDocs, query, updateDoc, where, writeBatch } from 'firebase/firestore';
+import { collection, doc, getDocs, query, where, writeBatch } from 'firebase/firestore';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { v4 as uuidv4 } from 'uuid';
 

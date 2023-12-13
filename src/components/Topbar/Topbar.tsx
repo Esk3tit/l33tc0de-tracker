@@ -88,10 +88,11 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
                     {user && problemPage && <Timer />}
                     {user ? (
                         <>
+                            <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Dashboard</button>
                             <div className='cursor-pointer group relative'>
                                 <img src='/avatar.png' alt='user profile avatar' className='h-8 w-8 rounded-full' />
                                 <div
-                                    className='absolute top-10 left-2/4 -translate-x-2/4  mx-auto bg-dark-layer-1 text-brand-orange p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 
+                                    className='absolute top-10 left-2/4 -translate-x-2/4 mx-auto bg-dark-layer-1 text-brand-orange p-2 rounded shadow-lg z-40 group-hover:scale-100 scale-0 
                                         transition-all duration-300 ease-in-out'
                                 >
                                     <p className='text-sm'>{user.email}</p>
@@ -101,7 +102,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
                         </>
                     ) : (
                         <Link href='/auth' onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true, mode: "login" }))}>
-                            <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded '>Sign In</button>
+                            <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Sign In</button>
                         </Link>
                     )}
                 </div>
