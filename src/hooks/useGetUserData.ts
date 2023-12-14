@@ -6,14 +6,14 @@ import { UserDBData } from '@/utils/types/user';
 
 function useGetUserData() {
     const [user] = useAuthState(auth);
-    const [userData, setUserData] = useState<UserDBData | {}>({});
+    const [userData, setUserData] = useState<UserDBData>({} as UserDBData);
 
     useEffect(() => {
         const getUsersData = async () => {
             const userRef = doc(firestore, 'users', user!.uid);
             const userSnap = await getDoc(userRef);
             if (userSnap.exists()) {
-                const _userData = userSnap.data();
+                const _userData = userSnap.data() as UserDBData;
                 setUserData({
                     ..._userData
                 });

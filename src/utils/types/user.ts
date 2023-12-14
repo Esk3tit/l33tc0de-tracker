@@ -10,3 +10,15 @@ export type UserDBData = {
     starredProblems: string[];
     role: 'admin' | 'user';
 };
+
+export type UserRole = {
+    uid: string;
+    displayName: string;
+    role: 'admin' | 'user';
+};
+
+export type ModifiedUserRoles = {
+    [key: string]: string;
+}
+
+export const userRoles: string[] = ['admin', 'user']
