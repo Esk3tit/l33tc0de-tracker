@@ -83,7 +83,6 @@ const Dashboard: React.FC<DashboardProps> = () => {
             {role === 'admin' ? (
                 <div className='flex flex-col items-center justify-center h-full bg-dark-layer-2'>
                     <h1 className='text-3xl font-bold'>Dashboard</h1>
-                    {/* TEMP FORM */}
                     <div className='flex flex-row items-start justify-evenly w-full'>
                         <form className="p-6 flex flex-col max-w-sm gap-3 bg-zinc-300" onSubmit={handleProblemSubmit}>
                             <input onChange={handleInputChange} type="text" placeholder="problem id" name="id" />
@@ -96,7 +95,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
                             <button type="submit" className="bg-lime-700">Submit to Firestore DB</button>
                         </form>
                         <form onSubmit={handleUserRoleSubmit}>
-                            <table className='text-sm text-left text-gray-500 dark:text-gray-400 sm:w-7/12 w-full max-w-[400px]'>
+                            <table className='text-sm text-left text-gray-500 dark:text-gray-400 sm:w-7/12 w-full max-w-[400px] mx-auto'>
                                 <thead className='text-xs text-gray-700 uppercase dark:text-gray-400 border-b'>
                                     <tr>
                                         <th scope='col' className='px-1 py-3 w-0 font-medium'>
