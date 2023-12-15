@@ -8,6 +8,7 @@ import { firestore } from "@/firebase/firebase";
 import { collection, doc, getDocs, query, setDoc, where, writeBatch } from "firebase/firestore";
 import UsersTable from '@/components/UsersTable/UsersTable';
 import { ModifiedUserRoles, UserRole } from '@/utils/types/user';
+import Topbar from '@/components/Topbar/Topbar';
 
 type DashboardProps = {
     
@@ -27,7 +28,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
         dislikes: 0
     });
 
-    const { role, userRoles, currUserRoles, setCurrUserRoles, loading, refetch } = useGetUserRoles();
+    const { role, userRoles, currUserRoles, setCurrUserRoles, loading, refetch, userLoading } = useGetUserRoles();
 
     const handleRoleChange = (idx: number, newRole: string) => {
         // Update the current user roles with modified user roles
@@ -79,9 +80,10 @@ const Dashboard: React.FC<DashboardProps> = () => {
     }
 
     return (
-        <>
+        <main className='bg-dark-layer-2 min-h-screen'>
+            <Topbar adminOnlyPage />
             {role === 'admin' ? (
-                <div className='flex flex-col items-center justify-center h-full bg-dark-layer-2'>
+                <div className='flex flex-col items-center justify-center h-full'>
                     <h1 className='text-3xl font-bold'>Dashboard</h1>
                     <div className='flex flex-row items-start justify-evenly w-full'>
                         <form className="p-6 flex flex-col max-w-sm gap-3 bg-zinc-300" onSubmit={handleProblemSubmit}>
@@ -113,24 +115,34 @@ const Dashboard: React.FC<DashboardProps> = () => {
                                     currUserRoles={currUserRoles}
                                 />
                             </table>
-                            <button type='submit' className="bg-lime-700">Apply Changes</button>
+                            <button disabled={loading} type='submit' className="bg-lime-700">Apply Changes</button>
                         </form>
                     </div>
                 </div>
             ) : (
-                <div className='flex flex-col items-center justify-center h-full'>
-                    <Image src='/steamsad.gif' alt='Logo' height={500} width={500} />
-                    <h2 className='text-3xl font-bold text-red-600'>Access Denied</h2>
-                    <p>You must be an admin to view this page...</p>
-                    <Link href='/'>
-                        <button className='bg-brand-orange hover:bg-brand-orange-s text-white font-medium rounded-lg
-                        text-sm px-5 py-2.5 text-center mt-5'>
-                            Go Home
-                        </button>
-                    </Link>
-                </div>
+                <>
+                    {!userLoading ? (
+                        <div className='flex flex-col items-center justify-center h-full'>
+                            <Image src='/steamsad.gif' alt='Logo' height={500} width={500} />
+                            <h2 className='text-3xl font-bold text-red-600'>Access Denied</h2>
+                            <p>You must be an admin to view this page...</p>
+                            <Link href='/'>
+                                <button className='bg-brand-orange hover:bg-brand-orange-s text-white font-medium rounded-lg
+                    text-sm px-5 py-2.5 text-center mt-5'>
+                                    Go Home
+                                </button>
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className='bg-dark-layer-2 min-h-screen text-3xl font-bold flex flex-col items-center justify-center h-full'>
+                            <Image src='/steamsad.gif' alt='Logo' height={500} width={500} />
+                            <h2 className='text-3xl font-bold text-red-600'>Loading...</h2>
+                            <p>Just a moment...</p>
+                        </div>
+                    )}
+                </>
             )}
-        </>
+        </main>
     )
 }
 export default Dashboard;
@@ -138,7 +150,7 @@ export default Dashboard;
 function useGetUserRoles() {
     const [loading, setLoading] = useState(false);
     const [userRoles, setUserRoles] = useState<UserRole[]>([]);
-    const { uid, role } = useGetUserData();
+    const { uid, role, userLoading } = useGetUserData();
     const [currUserRoles, setCurrUserRoles] = useState<ModifiedUserRoles>({});
     const [refresh, setRefresh] = useState({});
     const refetch = () => setRefresh({});
@@ -163,5 +175,5 @@ function useGetUserRoles() {
         if (uid) getUserRoles();
     }, [uid, refresh]);
 
-    return { role, userRoles, currUserRoles, setCurrUserRoles, loading, refetch };
+    return { role, userRoles, currUserRoles, setCurrUserRoles, loading, refetch, userLoading };
 }

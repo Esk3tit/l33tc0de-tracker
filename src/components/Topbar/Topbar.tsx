@@ -15,12 +15,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { problems } from '@/utils/problems';
 import { Problem } from '@/utils/types/problem';
 import useGetUserData from '@/hooks/useGetUserData';
+import path from 'path';
 
 type TopbarProps = {
     problemPage?: boolean;
+    adminOnlyPage?: boolean;
 };
 
-const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
+const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
 
     const [user] = useAuthState(auth);
     const { role } = useGetUserData();
@@ -47,6 +49,8 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
             router.push(`/problems/${nextProblemKey}`);
         }
     }
+
+    console.log(pathname)
 
     return (
         <nav className='relative flex w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7'>
@@ -90,7 +94,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
                     {user && problemPage && <Timer />}
                     {user ? (
                         <>
-                            {role === 'admin' && (
+                            {role === 'admin' && pathname !== "/dashboard" && (
                                 <Link href='/dashboard'>
                                     <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Dashboard</button>
                                 </Link>
@@ -104,7 +108,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
                                     <p className='text-sm'>{user.email}</p>
                                 </div>
                             </div>
-                            <Logout />
+                            <Logout adminOnlyPage={adminOnlyPage} />
                         </>
                     ) : (
                         <Link href='/auth' onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true, mode: "login" }))}>

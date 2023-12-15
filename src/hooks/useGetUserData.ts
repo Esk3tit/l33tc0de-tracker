@@ -5,7 +5,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { UserDBData } from '@/utils/types/user';
 
 function useGetUserData() {
-    const [user] = useAuthState(auth);
+    const [user, loading] = useAuthState(auth);
     const [userData, setUserData] = useState<UserDBData>({} as UserDBData);
 
     useEffect(() => {
@@ -24,7 +24,7 @@ function useGetUserData() {
 
     }, [user]);
 
-    return { ...userData };
+    return { ...userData, userLoading: loading };
 }
 
 export default useGetUserData;
