@@ -60,13 +60,14 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
     const [tabs, setTabs] = useState<ITabs[]>([]);
     const [activeTab, setActiveTab] = useState<ITabs>(() => (defaultTab));
     
-    const [user, loading] = useAuthState(auth);
+    const { user, trueUid, loading } = useGetTrueUid();
+    console.log(trueUid)
     const pathname = usePathname();
     const pid: string = pathname.split("/")[2];
 
     // Get tabs from local storage
     const getTabsFromLocalStorage = (): UnifiedTabs[] => {
-        const tabs: UnifiedTabs[] = Object.keys(localStorage).filter(key => key.startsWith(`code-${pid}~`)).map(tab => {
+        const tabs: UnifiedTabs[] = Object.keys(localStorage).filter(key => key.startsWith(`code#${trueUid}-${pid}~`)).map(tab => {
             const tabData = JSON.parse(localStorage.getItem(tab)!);
             return {
                 id: tabData.id,
@@ -160,12 +161,12 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
                 deleted: tab.deleted,
                 timestamp: tab.timestamp
             }
-            localStorage.setItem(`code-${pid}~${tabData.id}`, JSON.stringify(tabData));
+            localStorage.setItem(`code#${trueUid}-${pid}~${tabData.id}`, JSON.stringify(tabData));
         });
 
         // Clear expired tabs from local storage
         expiredTabIds.forEach(tabId => {
-            localStorage.removeItem(`code-${pid}~${tabId}`);
+            localStorage.removeItem(`code#${trueUid}-${pid}~${tabId}`);
         });
     }
 
@@ -244,23 +245,28 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         return () => {
             clearInterval(syncInterval)
         };
-    }, []);
+    }, [user]);
 
     // Fetch all tabs but only the code from active tab (first tab by default)
     useEffect(() => {
         mergeSyncData().then(mergedTabs => {
-            if(user && mergedTabs && mergedTabs.length) {
+            console.log(`mergedTabs: ${mergedTabs}, loading: ${loading}, user: ${user}`)
+            if(!loading && user && mergedTabs && mergedTabs.length) {
                 // Sort tabs
                 mergedTabs.sort((a, b) => a.timestamp - b.timestamp);
                 const currTab: ITabs = mergedTabs[0];
                 setUserCode(currTab.code);
                 setTabs(mergedTabs);
                 setActiveTab(currTab);
-            } else if (!loading) {
+            } else if (!loading && !user && tabs.length) {
+                console.log("clearing tabs")
+                resetTabs();
+            } else if (!loading && ((!user && !mergedTabs && !tabs.length) || (user && mergedTabs && !mergedTabs.length))) {
+                console.log("creating new tab")
                 addTab();
             }
         });
-    }, [pid, user, problem.starterCode]);
+    }, [pid, user, loading, problem.starterCode]);
 
     const onChange = (value: string) => {
         setUserCode(value);
@@ -277,7 +283,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
             return prev;
         });
 
-        localStorage.setItem(`code-${pid}~${activeTab.id}`, JSON.stringify(tabData));
+        localStorage.setItem(`code#${trueUid}-${pid}~${activeTab.id}`, JSON.stringify(tabData));
     }
 
     const generateNewTabTitle = () => {
@@ -308,7 +314,15 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         setTabs(prev => [...prev, newTab]);
         setActiveTab(newTab);
         setUserCode(newTab.code);
-        localStorage.setItem(`code-${pid}~${newTab.id}`, JSON.stringify(newTab));
+        localStorage.setItem(`code#${trueUid}-${pid}~${newTab.id}`, JSON.stringify(newTab));
+    }
+
+    // Reset tabs back to default of just 1 tab when signed out
+    const resetTabs = () => {
+        setTabs([defaultTab]);
+        setActiveTab(defaultTab);
+        setUserCode(defaultTab.code);
+        localStorage.setItem(`code#${trueUid}-${pid}~${newTab.id}`, JSON.stringify(newTab));
     }
 
     const deleteTab = (event: any, id: string) => {
@@ -348,7 +362,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
         }
         
         // Update the local storage to reflect the soft delete
-        localStorage.setItem(`code-${pid}~${id}`, JSON.stringify(updatedTab));
+        localStorage.setItem(`code#${trueUid}-${pid}~${id}`, JSON.stringify(updatedTab));
 
         // Show undo toast for 15 seconds
         toast.info("Tab deleted! Click this toast to undo.", {
@@ -368,7 +382,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
 
                 // Update the state and local storage
                 setTabs(restoredTabs);
-                localStorage.setItem(`code-${pid}~${id}`, JSON.stringify(restoredTab));
+                localStorage.setItem(`code#${trueUid}-${pid}~${id}`, JSON.stringify(restoredTab));
             },
         });
     }
@@ -434,3 +448,20 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
     )
 }
 export default Playground;
+
+function useGetTrueUid() {
+    const [user, loading] = useAuthState(auth);
+    const [trueUid, setTrueUid] = useState<string | undefined>(undefined);
+
+    useEffect(() => {
+        if(!loading) {
+            if (user) {
+                setTrueUid(user.uid);
+            } else {
+                setTrueUid("local");
+            }
+        }
+    }, [loading, user]);
+
+    return { user, trueUid, loading };
+}
