@@ -99,6 +99,11 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
                                     <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Dashboard</button>
                                 </Link>
                             )}
+                            {role === 'admin' && pathname === "/dashboard" && (
+                                <Link href='/'>
+                                    <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Problems</button>
+                                </Link>
+                            )}
                             <div className='cursor-pointer group relative'>
                                 <img src='/avatar.png' alt='user profile avatar' className='h-8 w-8 rounded-full' />
                                 <div
