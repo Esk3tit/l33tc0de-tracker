@@ -47,8 +47,19 @@ export interface LocalStorageMap {
     [key: string]: UnifiedTabs;
 }
 
-const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved }) => {
-    const defaultTab = { id: uuidv4(), title: "New Solution (1)", code: problem.starterCode, deleted: false, timestamp: Date.now() };
+const Playground:React.FC<PlaygroundProps> = ({ problem }) => {
+    const generateDefaultTab = () => {
+        const newTab = {
+            id: uuidv4(),
+            title: "New New Solution (1)",
+            code: problem.starterCode,
+            deleted: false,
+            timestamp: Date.now()
+        }
+        return newTab;
+    }
+
+    const defaultTab = generateDefaultTab()
     const [activeTestCaseId, setActiveTestCaseId] = useState<number>(0);
     let [userCode, setUserCode] = useState<string>(problem.starterCode);
     const [fontSize, setFontSize] = useLocalStorage("font-size", "16px");
@@ -319,6 +330,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSucess, setSolved })
 
     // Reset tabs back to default of just 1 tab when signed out
     const resetTabs = () => {
+        const newTab = generateDefaultTab();
         setTabs([defaultTab]);
         setActiveTab(defaultTab);
         setUserCode(defaultTab.code);
