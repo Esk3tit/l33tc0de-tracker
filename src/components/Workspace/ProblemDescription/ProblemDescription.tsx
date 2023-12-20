@@ -1,6 +1,7 @@
 import CircleSkeleton from '@/components/Skeletons/CircleSkeleton';
 import RectangleSkeleton from '@/components/Skeletons/RectangleSkeleton';
 import { auth, firestore } from '@/firebase/firebase';
+import useGetUsersDataOnProblem from '@/hooks/useGetUsersDataOnProblem';
 import { DBProblem, Problem } from '@/utils/types/problem';
 import { arrayRemove, arrayUnion, doc, getDoc, runTransaction, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
@@ -12,16 +13,25 @@ import { toast } from 'react-toastify';
 
 type ProblemDescriptionProps = {
     problem: Problem,
-    _solved: boolean
+    solved: boolean,
+    liked: boolean, 
+    disliked: boolean,
+    starred: boolean,
+    setData: React.Dispatch<React.SetStateAction<{
+        liked: boolean;
+        disliked: boolean;
+        starred: boolean;
+        solved: boolean;
+    }>>
 };
 
 const options: any = { position: 'top-left', autoClose: 3000, theme: 'dark' };
 
-const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, _solved }) => {
+const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, solved, liked, disliked, starred, setData }) => {
 
     const [user] = useAuthState(auth);
     const { currentProblem, loading, problemDifficultyClass, setCurrentProblem } = useGetCurrentProblem(problem.id);
-    const { liked, disliked, starred, solved, setData } = useGetUsersDataOnProblem(problem.id);
+    // const { liked, disliked, starred, setData } = useGetUsersDataOnProblem(problem.id);
     const [updating, setUpdating] = useState(false);
 
     const returnUserAndProblemData = async (transaction: any) => {
@@ -185,7 +195,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, _solve
                                 >
                                     {currentProblem.difficulty}
                                 </div>
-                                {(solved || _solved) && (
+                                {solved && (
                                     <div className='rounded p-[3px] ml-4 text-lg transition-colors duration-200 text-green-s text-dark-green-s'>
                                         <BsCheck2Circle />
                                     </div>
@@ -294,33 +304,4 @@ function useGetCurrentProblem(problemId: string) {
     }, [problemId]);
 
     return { currentProblem, loading, problemDifficultyClass, setCurrentProblem };
-}
-
-function useGetUsersDataOnProblem(problemId: string) {
-    const [data, setData] = useState({ liked: false, disliked: false, starred: false, solved: false });
-    const [user] = useAuthState(auth);
-
-    useEffect(() => {
-        const getUsersDataOnProblem = async () => {
-            const userRef = doc(firestore, 'users', user!.uid);
-            const userSnap = await getDoc(userRef);
-            if (userSnap.exists()) {
-                const userData = userSnap.data();
-                const { likedProblems, dislikedProblems, starredProblems, solvedProblems } = userData;
-                setData({
-                    liked: likedProblems.includes(problemId),
-                    disliked: dislikedProblems.includes(problemId),
-                    starred: starredProblems.includes(problemId),
-                    solved: solvedProblems.includes(problemId),
-                });
-            }
-        }
-
-        if (user) getUsersDataOnProblem();
-
-        return () => setData({ liked: false, disliked: false, starred: false, solved: false });
-
-    }, [problemId, user]);
-
-    return { ...data, setData };
 }

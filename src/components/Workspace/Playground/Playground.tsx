@@ -10,14 +10,16 @@ import { auth, firestore } from '@/firebase/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { ToastOptions, toast } from 'react-toastify';
 import { usePathname } from 'next/navigation';
-import { arrayUnion, collection, doc, getDocs, query, updateDoc, where, writeBatch } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, doc, getDocs, query, updateDoc, where, writeBatch } from 'firebase/firestore';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { v4 as uuidv4 } from 'uuid';
+import useGetUsersDataOnProblem from '@/hooks/useGetUsersDataOnProblem';
 
 type PlaygroundProps = {
     problem: Problem,
     setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
-    setSolved: React.Dispatch<React.SetStateAction<boolean>>
+    refetch: () => void,
+    solved: boolean
 };
 
 const options: ToastOptions = { position: 'top-center', autoClose: 3000, theme: 'dark' };
@@ -47,7 +49,7 @@ export interface LocalStorageMap {
     [key: string]: UnifiedTabs;
 }
 
-const Playground:React.FC<PlaygroundProps> = ({ problem, setSolved, setSuccess }) => {
+const Playground:React.FC<PlaygroundProps> = ({ problem, setSuccess, solved, refetch }) => {
     const generateDefaultTab = () => {
         const newTab = {
             id: uuidv4(),
@@ -76,22 +78,32 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSolved, setSuccess }
     const pathname = usePathname();
     const pid: string = pathname.split("/")[2];
 
-    const handleMarkSolved = async () => {
+    const handleMarkSolved = async (solve: boolean) => {
         if (!user) {
 			toast.error("Please login to mark problem as solved", options);
 			return;
 		}
 		try {
-            setSuccess(true);
-            setTimeout(() => {
-                setSuccess(false);
-            }, 4000);
-
-            const userRef = doc(firestore, "users", user.uid);
-            await updateDoc(userRef, {
-                solvedProblems: arrayUnion(pid),
-            });
-            setSolved(true);
+            if (solve) {
+                setSuccess(true);
+                setTimeout(() => {
+                    setSuccess(false);
+                }, 4000);
+    
+                const userRef = doc(firestore, "users", user.uid);
+                await updateDoc(userRef, {
+                    solvedProblems: arrayUnion(pid),
+                });
+                // setSolved(true);
+            } else {
+                const userRef = doc(firestore, "users", user.uid);
+                await updateDoc(userRef, {
+                    solvedProblems: arrayRemove(pid),
+                });
+                // setSolved(false);
+            }
+            console.log("refetching")
+            refetch();
         } catch (error: any) {
 			console.log(error.message);
 			if (
@@ -483,7 +495,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSolved, setSuccess }
                     </div>
                 </div>
             </Split>
-            <EditorFooter handleMarkSolved={handleMarkSolved} handleSaveSync={handleSaveSync} />
+            <EditorFooter solved={solved} handleMarkSolved={handleMarkSolved} handleSaveSync={handleSaveSync} />
         </div>
     )
 }
