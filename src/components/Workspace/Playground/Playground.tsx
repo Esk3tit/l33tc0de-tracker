@@ -8,19 +8,19 @@ import EditorFooter from './EditorFooter';
 import { Problem } from '@/utils/types/problem';
 import { auth, firestore } from '@/firebase/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { toast } from 'react-toastify';
+import { ToastOptions, toast } from 'react-toastify';
 import { usePathname } from 'next/navigation';
-import { collection, doc, getDocs, query, where, writeBatch } from 'firebase/firestore';
+import { arrayUnion, collection, doc, getDocs, query, updateDoc, where, writeBatch } from 'firebase/firestore';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { v4 as uuidv4 } from 'uuid';
 
 type PlaygroundProps = {
     problem: Problem,
-    setSucess: React.Dispatch<React.SetStateAction<boolean>>,
+    setSuccess: React.Dispatch<React.SetStateAction<boolean>>,
     setSolved: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const options: any = { position: 'top-center', autoClose: 3000, theme: 'dark' };
+const options: ToastOptions = { position: 'top-center', autoClose: 3000, theme: 'dark' };
 const SYNC_INTERVAL = 300000; // 5 minutes
 const NOTIFICATION_OFFSET = 10000; // 10 seconds
 
@@ -47,7 +47,7 @@ export interface LocalStorageMap {
     [key: string]: UnifiedTabs;
 }
 
-const Playground:React.FC<PlaygroundProps> = ({ problem }) => {
+const Playground:React.FC<PlaygroundProps> = ({ problem, setSolved, setSuccess }) => {
     const generateDefaultTab = () => {
         const newTab = {
             id: uuidv4(),
@@ -75,6 +75,34 @@ const Playground:React.FC<PlaygroundProps> = ({ problem }) => {
     console.log(trueUid)
     const pathname = usePathname();
     const pid: string = pathname.split("/")[2];
+
+    const handleMarkSolved = async () => {
+        if (!user) {
+			toast.error("Please login to mark problem as solved", options);
+			return;
+		}
+		try {
+            setSuccess(true);
+            setTimeout(() => {
+                setSuccess(false);
+            }, 4000);
+
+            const userRef = doc(firestore, "users", user.uid);
+            await updateDoc(userRef, {
+                solvedProblems: arrayUnion(pid),
+            });
+            setSolved(true);
+        } catch (error: any) {
+			console.log(error.message);
+			if (
+				error.message.startsWith("AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:")
+			) {
+				toast.error("Oops! One or more test cases failed", options);
+			} else {
+				toast.error(error.message, options);
+			}
+		}
+    }
 
     // Get tabs from local storage
     const getTabsFromLocalStorage = (): UnifiedTabs[] => {
@@ -455,7 +483,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem }) => {
                     </div>
                 </div>
             </Split>
-            <EditorFooter handleSaveSync={handleSaveSync} />
+            <EditorFooter handleMarkSolved={handleMarkSolved} handleSaveSync={handleSaveSync} />
         </div>
     )
 }

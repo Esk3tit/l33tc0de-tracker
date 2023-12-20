@@ -15,7 +15,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { problems } from '@/utils/problems';
 import { Problem } from '@/utils/types/problem';
 import useGetUserData from '@/hooks/useGetUserData';
-import path from 'path';
 
 type TopbarProps = {
     problemPage?: boolean;
@@ -53,7 +52,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
     console.log(pathname)
 
     return (
-        <nav className='relative flex w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7'>
+        <nav className='relative flex h-[50px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7'>
             <div className={`flex w-full items-center justify-between ${!problemPage ? "max-w-[1200px] mx-auto" : ""}`}>
                 <Link href='/' className='flex-1'>
                     <Image src='/steamhappy.png' alt='Logo' height={100} width={100} />
