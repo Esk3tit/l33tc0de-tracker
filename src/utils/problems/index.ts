@@ -6,5 +6,6 @@ interface ProblemMap {
 }
 
 export const problems: ProblemMap = {
-    "two-sum": twoSum
+    "two-sum": twoSum,
+    "contains-duplicate": twoSum
 }

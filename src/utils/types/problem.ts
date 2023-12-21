@@ -30,3 +30,11 @@ export type DBProblem = {
 	videoId?: string;
 	link?: string;
 };
+
+export type ProblemSet = {
+	id: string;
+	title: string;
+	imageUrl: string;
+	alt: string;
+	problems: Set<string>;
+}

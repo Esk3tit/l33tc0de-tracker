@@ -1,12 +1,29 @@
 'use client'
 
-import ProblemsTable from "@/components/ProblemsTable/ProblemsTable";
 import Topbar from "@/components/Topbar/Topbar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { auth, firestore } from '@/firebase/firebase';
+import { DBProblem } from '@/utils/types/problem';
+import { collection, doc, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { problemSets } from "@/data/problemSets";
+import ProblemListDropdown from "@/components/Dropdowns/ProblemListDropdown";
 
 export default function Home() {
 
   const [loading, setLoading] = useState(true);
+  const allProblems = useGetProblems(setLoading);
+  const userSolvedProblems = useGetSolvedProblems();
+
+  const filterProblemsForProblemSet = (setId: string) => {
+    const problemsInSet = problemSets.find(set => set.id === setId)!.problems;
+    return allProblems.filter(problem => problemsInSet.has(problem.id));
+  }
+
+  const filterSolvedProblemsForProblemSet = (setId: string) => {
+    const problemsInSet = problemSets.find(set => set.id === setId)!.problems;
+    return userSolvedProblems.filter(problem => problemsInSet.has(problem));
+  }
 
   return (
     <main className="bg-dark-layer-2 min-h-screen">
@@ -23,31 +40,18 @@ export default function Home() {
               <LoadingSkeleton key={i} />
             ))}
           </div>)}
-        <table className='text-sm text-left text-gray-500 dark:text-gray-400 sm:w-7/12 w-full max-w-[1200px] mx-auto'>
-          {!loading && (
-            <thead className='text-xs text-gray-700 uppercase dark:text-gray-400 border-b'>
-              <tr>
-                <th scope='col' className='px-1 py-3 w-0 font-medium'>
-                  Status
-                </th>
-                <th scope='col' className='px-6 py-3 w-0 font-medium'>
-                  Title
-                </th>
-                <th scope='col' className='px-6 py-3 w-0 font-medium'>
-                  Difficulty
-                </th>
-
-                <th scope='col' className='px-6 py-3 w-0 font-medium'>
-                  Category
-                </th>
-                <th scope='col' className='px-6 py-3 w-0 font-medium'>
-                  Solution
-                </th>
-              </tr>
-            </thead>
-          )}
-          <ProblemsTable setLoading={setLoading} />
-        </table>
+        {!loading && (
+          <div className=''>
+            {problemSets.map(problemSet => (
+              <ProblemListDropdown
+                key={problemSet.id}
+                problemSet={problemSet}
+                filterProblemsForProblemSet={filterProblemsForProblemSet}
+                filterSolvedProblemsForProblemSet={filterSolvedProblemsForProblemSet}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </main>
   )
@@ -64,3 +68,48 @@ const LoadingSkeleton = () => {
 		</div>
 	);
 };
+
+function useGetProblems(setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
+  const [problems, setProblems] = useState<DBProblem[]>([]);
+
+  useEffect(() => {
+      const getProblems = async () => {
+          setLoading(true);
+          const q = query(collection(firestore, 'problems'), orderBy('order', 'asc'));
+          const querySnapshot = await getDocs(q);
+          const temp: DBProblem[] = [];
+          querySnapshot.forEach((doc) => {
+              temp.push({ id: doc.id, ...doc.data() } as DBProblem);
+          });
+          setProblems(temp);
+          setLoading(false);
+      };
+
+      getProblems();
+  }, [setLoading]);
+
+  return problems;
+}
+
+function useGetSolvedProblems() {
+  const [solvedProblems, setSolvedProblems] = useState<string[]>([]);
+  const [user] = useAuthState(auth);
+
+  useEffect(() => {
+      const getSolvedProblems = async () => {
+          const userRef = doc(firestore, 'users', user!.uid);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+              const data = userSnap.data();
+              if (data) {
+                  setSolvedProblems(data.solvedProblems);
+              }
+          }
+      };
+
+      if (user) getSolvedProblems();
+      if (!user) setSolvedProblems([]);
+  }, [user]);
+
+  return solvedProblems;
+}

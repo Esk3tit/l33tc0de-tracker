@@ -13,7 +13,6 @@ import { usePathname } from 'next/navigation';
 import { arrayRemove, arrayUnion, collection, doc, getDocs, query, updateDoc, where, writeBatch } from 'firebase/firestore';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { v4 as uuidv4 } from 'uuid';
-import useGetUsersDataOnProblem from '@/hooks/useGetUsersDataOnProblem';
 
 type PlaygroundProps = {
     problem: Problem,

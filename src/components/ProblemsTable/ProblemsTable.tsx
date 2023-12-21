@@ -12,17 +12,17 @@ import { DBProblem } from '@/utils/types/problem';
 import { useAuthState } from 'react-firebase-hooks/auth';
 
 type ProblemsTableProps = {
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+    problems: DBProblem[];
+    solvedProblems: Set<string>;
 };
 
-const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoading }) => {
+const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems }) => {
 
     const [youtubePlayer, setYoutubePlayer] = useState({
         isOpen: false,
         videoId: '',
     });
-    const problems = useGetProblems(setLoading);
-    const solvedProblems = useGetSolvedProblems();
+
     const closeModal = () => {
         setYoutubePlayer({ isOpen: false, videoId: '' });
     };
@@ -45,7 +45,7 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoading }) => {
                     return (
                         <tr key={problem.id} className={`${idx % 2 === 1 ? 'bg-dark-layer-1' : ''}`}>
                             <th className='px-2 py-4 font-medium whitespace-nowrap text-dark-green-s'>
-                                {solvedProblems.includes(problem.id) && <BsCheckCircle fontSize={18} width={18} />}
+                                {solvedProblems.has(problem.id) && <BsCheckCircle fontSize={18} width={18} />}
                             </th>
                             <td className='px-6 py-4'>
                                 {problem.link ? (
@@ -98,48 +98,3 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ setLoading }) => {
     );
 }
 export default ProblemsTable;
-
-function useGetProblems(setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
-    const [problems, setProblems] = useState<DBProblem[]>([]);
-
-    useEffect(() => {
-        const getProblems = async () => {
-            setLoading(true);
-            const q = query(collection(firestore, 'problems'), orderBy('order', 'asc'));
-            const querySnapshot = await getDocs(q);
-            const temp: DBProblem[] = [];
-            querySnapshot.forEach((doc) => {
-                temp.push({ id: doc.id, ...doc.data() } as DBProblem);
-            });
-            setProblems(temp);
-            setLoading(false);
-        };
-
-        getProblems();
-    }, [setLoading]);
-
-    return problems;
-}
-
-function useGetSolvedProblems() {
-    const [solvedProblems, setSolvedProblems] = useState<string[]>([]);
-    const [user] = useAuthState(auth);
-
-    useEffect(() => {
-        const getSolvedProblems = async () => {
-            const userRef = doc(firestore, 'users', user!.uid);
-            const userSnap = await getDoc(userRef);
-            if (userSnap.exists()) {
-                const data = userSnap.data();
-                if (data) {
-                    setSolvedProblems(data.solvedProblems);
-                }
-            }
-        };
-
-        if (user) getSolvedProblems();
-        if (!user) setSolvedProblems([]);
-    }, [user]);
-
-    return solvedProblems;
-}
