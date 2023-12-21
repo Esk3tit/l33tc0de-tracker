@@ -23,7 +23,6 @@ const ProblemPage:React.FC<ProblemPageProps> = ({ params }) => {
     if (!problem) {
 		notFound();
 	}
-	problem.handlerFunction = problem.handlerFunction.toString();
 
     return <div>
         <Topbar problemPage />

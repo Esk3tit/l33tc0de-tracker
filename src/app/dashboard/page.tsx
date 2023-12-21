@@ -84,7 +84,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
             <Topbar adminOnlyPage />
             {role === 'admin' ? (
                 <div className='flex flex-col items-center justify-center h-full'>
-                    <h1 className='text-3xl font-bold'>Dashboard</h1>
+                    <h1 className='text-3xl font-bold text-white'>Dashboard</h1>
                     <div className='flex flex-row items-start justify-evenly w-full'>
                         <form className="p-6 flex flex-col max-w-sm gap-3 bg-zinc-300" onSubmit={handleProblemSubmit}>
                             <input onChange={handleInputChange} type="text" placeholder="problem id" name="id" />

@@ -31,7 +31,6 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, solved
 
     const [user] = useAuthState(auth);
     const { currentProblem, loading, problemDifficultyClass, setCurrentProblem } = useGetCurrentProblem(problem.id);
-    // const { liked, disliked, starred, setData } = useGetUsersDataOnProblem(problem.id);
     const [updating, setUpdating] = useState(false);
 
     const returnUserAndProblemData = async (transaction: any) => {

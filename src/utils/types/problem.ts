@@ -15,8 +15,6 @@ export type Problem = {
 	constraints: string;
 	order: number;
 	starterCode: string;
-	handlerFunction: ((fn: any) => boolean) | string;
-	starterFunctionName: string;
 };
 
 export type DBProblem = {
