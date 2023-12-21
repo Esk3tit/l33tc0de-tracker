@@ -41,7 +41,8 @@ export default function Home() {
             ))}
           </div>)}
         {!loading && (
-          <div className=''>
+          <div className='flex flex-col'>
+            <h2 className='text-1xl text-center text-gray-700 dark:text-gray-400 font-medium uppercase mb-5'>Problem Sets</h2>
             {problemSets.map(problemSet => (
               <ProblemListDropdown
                 key={problemSet.id}

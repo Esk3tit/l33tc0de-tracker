@@ -109,3 +109,20 @@ code {
 	color: white;
 	font-size: 1rem;
 }
+
+.accordion-content {
+	display: grid;
+	transition: grid-template-rows 500ms;
+}
+
+.accordion-open {
+	grid-template-rows: 1fr;
+}
+
+.accordion-closed {
+	grid-template-rows: 0fr;
+}
+
+.inside-accordion {
+	overflow: hidden;
+}

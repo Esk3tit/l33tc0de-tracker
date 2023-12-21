@@ -6,10 +6,7 @@ import { AiFillYoutube } from 'react-icons/ai';
 import Link from 'next/link';
 import { IoClose } from 'react-icons/io5';
 import YouTube from 'react-youtube';
-import { collection, doc, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
-import { auth, firestore } from '@/firebase/firebase';
 import { DBProblem } from '@/utils/types/problem';
-import { useAuthState } from 'react-firebase-hooks/auth';
 
 type ProblemsTableProps = {
     problems: DBProblem[];
