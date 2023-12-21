@@ -15,6 +15,7 @@ export type Problem = {
 	constraints: string;
 	order: number;
 	starterCode: string;
+	followUp?: string;
 };
 
 export type DBProblem = {

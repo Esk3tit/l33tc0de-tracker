@@ -246,13 +246,13 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, solved
                         <div className='mt-4'>
                             {problem.examples.map((example, index) => (
                                 <div key={example.id}>
-                                    <p className='font-medium text-white '>Example {index + 1}: </p>
+                                    <strong className='text-white text-sm'>Example {index + 1}: </strong>
                                     {example.img && <img src={example.img} alt='' className='mt-3' />}
                                     <div className='example-card'>
                                         <pre>
-                                            <strong className='text-white'>Input: </strong> {example.inputText}
+                                            <strong className='text-white'>Input:</strong> {example.inputText}
                                             <br />
-                                            <strong>Output:</strong>
+                                            <strong>Output: </strong>
                                             {example.outputText} <br />
                                             {example.explanation && (
                                                 <>
@@ -267,11 +267,18 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, solved
 
                         {/* Constraints */}
                         <div className='my-8 pb-4'>
-                            <div className='text-white text-sm font-medium'>Constraints:</div>
-                            <ul className='text-white ml-5 list-disc'>
+                            <strong className='text-white text-sm'>Constraints:</strong>
+                            <ul className='text-white ml-5 list-disc text-sm'>
                                 <div dangerouslySetInnerHTML={{ __html: problem.constraints }} />
                             </ul>
                         </div>
+
+                        {/* Optional follow up */}
+                        {problem.followUp && (
+                            <div className='text-white text-sm'>
+                                <strong className='text-white'>Follow up:</strong> {problem.followUp}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

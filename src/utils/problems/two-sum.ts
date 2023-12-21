@@ -2,7 +2,8 @@ import { Problem } from "../types/problem";
 
 const starterCodeTwoSum = `class Solution:
 def twoSum(self, nums: List[int], target: int) -> List[int]:
-    pass`;
+
+`;
 
 export const twoSum: Problem = {
 	id: "two-sum",
@@ -13,7 +14,7 @@ export const twoSum: Problem = {
 </p>
 <p class='mt-3'>
   You may assume that each input would have <strong>exactly one solution</strong>, and you
-  may not use thesame element twice.
+  may not use the same element twice.
 </p>
 <p class='mt-3'>You can return the answer in any order.</p>`,
 	examples: [
@@ -31,7 +32,7 @@ export const twoSum: Problem = {
 		},
 		{
 			id: 3,
-			inputText: " nums = [3,3], target = 6",
+			inputText: "nums = [3,3], target = 6",
 			outputText: "[0,1]",
 		},
 	],
