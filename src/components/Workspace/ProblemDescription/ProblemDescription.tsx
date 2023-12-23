@@ -1,7 +1,6 @@
 import CircleSkeleton from '@/components/Skeletons/CircleSkeleton';
 import RectangleSkeleton from '@/components/Skeletons/RectangleSkeleton';
 import { auth, firestore } from '@/firebase/firebase';
-import useGetUsersDataOnProblem from '@/hooks/useGetUsersDataOnProblem';
 import { DBProblem, Problem } from '@/utils/types/problem';
 import { arrayRemove, arrayUnion, doc, getDoc, runTransaction, updateDoc } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';

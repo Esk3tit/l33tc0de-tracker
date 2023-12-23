@@ -33,23 +33,20 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
     const handleProblemChange = (isForward: boolean) => {
         const pid = pathname.split("/")[2];
         const { order } = problems[pid] as Problem;
-        const direction = isForward ? 1 : -1;
-        const nextProblemOrder = order + direction;
+
+        const sortedProblemOrders = Object.values(problems).map(problem => (problem as Problem).order).sort((a, b) => a - b);
+        const currentProblemIndex = sortedProblemOrders.findIndex(problemOrder => problemOrder === order);
+
+        // Get next problem order even if not consecutive order number
+        const nextProblemIndex = isForward
+            ? (currentProblemIndex + 1) % sortedProblemOrders.length // Wrap around to the start of the list if we're at the end
+            : (currentProblemIndex - 1 + sortedProblemOrders.length) % sortedProblemOrders.length; // Wrap around to the end of the list if we're at the start
+
+        const nextProblemOrder = sortedProblemOrders[nextProblemIndex];
         const nextProblemKey = Object.keys(problems).find(key => (problems[key] as Problem).order === nextProblemOrder);
 
-        // Wrap around for first and last problems
-        if (isForward && !nextProblemKey) {
-            const firstProblemKey = Object.keys(problems).find(key => (problems[key] as Problem).order === 1);
-            router.push(`/problems/${firstProblemKey}`);
-        } else if (!isForward && !nextProblemKey) {
-            const lastProblemKey = Object.keys(problems).find(key => (problems[key] as Problem).order === Object.keys(problems).length);
-            router.push(`/problems/${lastProblemKey}`);
-        } else {
-            router.push(`/problems/${nextProblemKey}`);
-        }
+        router.push(`/problems/${nextProblemKey}`);
     }
-
-    console.log(pathname)
 
     return (
         <nav className='relative flex h-[50px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7'>
@@ -82,7 +79,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
                 <div className='flex items-center space-x-4 flex-1 justify-end'>
                     <div>
                         <a
-                            href='https://www.buymeacoffee.com/burakorkmezz'
+                            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
                             target='_blank'
                             rel='noreferrer'
                             className='bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-brand-orange hover:bg-dark-fill-2'
