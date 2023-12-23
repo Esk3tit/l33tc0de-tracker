@@ -11,9 +11,10 @@ import { DBProblem } from '@/utils/types/problem';
 type ProblemsTableProps = {
     problems: DBProblem[];
     solvedProblems: Set<string>;
+    problemSetId: string;
 };
 
-const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems }) => {
+const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems, problemSetId }) => {
 
     const [youtubePlayer, setYoutubePlayer] = useState({
         isOpen: false,
@@ -50,7 +51,7 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems 
                                         {problem.title}
                                     </Link>
                                 ) : (
-                                    <Link className='hover:text-blue-600 cursor-pointer' href={`/problems/${problem.id}`}>
+                                    <Link className='hover:text-blue-600 cursor-pointer' href={`/problems/${problem.id}?set=${problemSetId}`}>
                                         {problem.title}
                                     </Link>
                                 )}

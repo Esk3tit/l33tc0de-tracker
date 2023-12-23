@@ -52,7 +52,7 @@ const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, fi
                                     </th>
                                 </tr>
                             </thead>
-                            <ProblemsTable problems={problems} solvedProblems={solvedProblems} />
+                            <ProblemsTable problemSetId={problemSet.id} problems={problems} solvedProblems={solvedProblems} />
                         </table>
                     </div>
                 </div>

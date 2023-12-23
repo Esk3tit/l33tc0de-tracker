@@ -11,10 +11,11 @@ import { authModalState } from '@/atoms/authModalAtom';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { BsList } from 'react-icons/bs';
 import Timer from '../Timer/Timer';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { problems } from '@/utils/problems';
 import { Problem } from '@/utils/types/problem';
 import useGetUserData from '@/hooks/useGetUserData';
+import { problemSets } from '@/data/problemSets';
 
 type TopbarProps = {
     problemPage?: boolean;
@@ -29,13 +30,17 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
     const setAuthModalState = useSetRecoilState(authModalState);
     const pathname = usePathname();
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     const handleProblemChange = (isForward: boolean) => {
         const pid = pathname.split("/")[2];
+        const problemSetId = searchParams.get("set");
         const { order } = problems[pid] as Problem;
+        const selectedSet = problemSets.find(set => set.id === problemSetId);
+        const selectedSetProblems = selectedSet ? Array.from(selectedSet.problems) : Object.keys(problems);
 
-        const sortedProblemOrders = Object.values(problems).map(problem => (problem as Problem).order).sort((a, b) => a - b);
-        const currentProblemIndex = sortedProblemOrders.findIndex(problemOrder => problemOrder === order);
+        const sortedProblemOrders = selectedSetProblems.map(pid => (problems[pid] as Problem).order).sort((a, b) => a - b);
+        const currentProblemIndex = sortedProblemOrders.indexOf(order);
 
         // Get next problem order even if not consecutive order number
         const nextProblemIndex = isForward
@@ -43,9 +48,9 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
             : (currentProblemIndex - 1 + sortedProblemOrders.length) % sortedProblemOrders.length; // Wrap around to the end of the list if we're at the start
 
         const nextProblemOrder = sortedProblemOrders[nextProblemIndex];
-        const nextProblemKey = Object.keys(problems).find(key => (problems[key] as Problem).order === nextProblemOrder);
+        const nextProblemKey = selectedSetProblems.find(pid => (problems[pid] as Problem).order === nextProblemOrder);
 
-        router.push(`/problems/${nextProblemKey}`);
+        router.push(`/problems/${nextProblemKey}?set=${problemSetId}`);
     }
 
     return (
