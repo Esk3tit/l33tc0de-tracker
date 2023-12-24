@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ProblemsTable from '../ProblemsTable/ProblemsTable';
 import { DBProblem, ProblemSet } from '@/utils/types/problem';
+import { problemSets } from '@/data/problemSets';
+import { useSearchParams } from 'next/navigation';
 
 type ProblemListDropdownProps = {
     problemSet: ProblemSet;
@@ -10,9 +12,12 @@ type ProblemListDropdownProps = {
 };
 
 const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, filterProblemsForProblemSet, filterSolvedProblemsForProblemSet, withModal }) => {
-    const [isOpen, setIsOpen] = useState(false);
     const [problems, setProblems] = useState<DBProblem[]>(filterProblemsForProblemSet(problemSet.id));
     const [solvedProblems, setSolvedProblems] = useState<Set<string>>(new Set(filterSolvedProblemsForProblemSet(problemSet.id)));
+    const searchParams = useSearchParams();
+    const problemSetId = searchParams.get("set");
+    const selectedSet = problemSets.find(set => set.id === problemSetId);
+    const [isOpen, setIsOpen] = useState((withModal && problemSet.id === selectedSet?.id) || false);
 
     const toggleDropdown = () => {
         if (!isOpen) {

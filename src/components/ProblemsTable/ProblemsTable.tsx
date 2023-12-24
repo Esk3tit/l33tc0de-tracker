@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, use } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BsCheckCircle } from 'react-icons/bs';
 import { AiFillYoutube } from 'react-icons/ai';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import { IoClose } from 'react-icons/io5';
 import YouTube from 'react-youtube';
 import { DBProblem } from '@/utils/types/problem';
 import useCloseModal from '@/hooks/useCloseModal';
+import { usePathname } from 'next/navigation';
 
 type ProblemsTableProps = {
     problems: DBProblem[];
@@ -22,6 +23,8 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems,
         isOpen: false,
         videoId: '',
     });
+    const pathname = usePathname();
+    const pid = pathname.split("/")[2];
 
     const closeModal = () => {
         setYoutubePlayer({ isOpen: false, videoId: '' });
@@ -45,23 +48,49 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems,
                 {problems.map((problem, idx) => {
                     const difficultyColor = problem.difficulty === 'Easy' ? 'text-dark-green-s' : problem.difficulty === 'Medium' ? 'text-dark-yellow' : 'text-dark-pink';
                     return (
-                        <tr key={problem.id} className={`${idx % 2 === 1 ? 'bg-dark-layer-1' : ''}`}>
+                        <tr key={problem.id} className={`${(withModal && problem.id === pid) ? 'bg-gray-500' : idx % 2 === 1 ? 'bg-dark-layer-1' : ''}`}>
                             <th className='px-2 py-4 font-medium whitespace-nowrap text-dark-green-s'>
                                 {solvedProblems.has(problem.id) && <BsCheckCircle fontSize={18} width={18} />}
                             </th>
                             <td className='px-6 py-4'>
                                 {problem.link ? (
-                                    <Link className='hover:text-blue-600 cursor-pointer' href={problem.link} target='_blank'>
-                                        {problem.title}
-                                    </Link>
-                                ) : (
                                     <>
                                         {withModal ? (
-                                            <Link className='hover:text-blue-600 cursor-pointer' onClick={closeSideNavProblemSetsModal} href={`/problems/${problem.id}?set=${problemSetId}`}>
+                                            <Link
+                                                className={`hover:text-blue-600 cursor-pointer ${problem.id === pid ? 'text-blue-400' : ''}`}
+                                                onClick={closeSideNavProblemSetsModal}
+                                                href={problem.link}
+                                                target='_blank'
+                                                rel="noopener noreferrer"
+                                            >
                                                 {problem.title}
                                             </Link>
                                         ) : (
-                                            <Link className='hover:text-blue-600 cursor-pointer' href={`/problems/${problem.id}?set=${problemSetId}`}>
+                                            <Link
+                                                className='hover:text-blue-600 cursor-pointer'
+                                                href={problem.link}
+                                                target='_blank'
+                                                rel="noopener noreferrer"
+                                            >
+                                                {problem.title}
+                                            </Link>
+                                        )}
+                                    </>
+                                ) : (
+                                    <>
+                                        {withModal ? (
+                                            <Link
+                                            className={`hover:text-blue-600 cursor-pointer ${problem.id === pid ? 'text-blue-800' : ''}`}
+                                                onClick={closeSideNavProblemSetsModal}
+                                                href={`/problems/${problem.id}?set=${problemSetId}`}
+                                            >
+                                                {problem.title}
+                                            </Link>
+                                        ) : (
+                                            <Link
+                                                className='hover:text-blue-600 cursor-pointer'
+                                                href={`/problems/${problem.id}?set=${problemSetId}`}
+                                            >
                                                 {problem.title}
                                             </Link>
                                         )}
