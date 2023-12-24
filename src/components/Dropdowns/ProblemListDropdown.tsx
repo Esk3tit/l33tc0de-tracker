@@ -22,7 +22,7 @@ const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, fi
     }
     
     return (
-        <div>
+        <>
             <div className="cursor-pointer flex flex-row items-center justify-between text-white border-solid border-2 rounded-md bg-neutral-700" onClick={toggleDropdown}>
                 <img className='w-[50px] h-[50px]' src={problemSet.imageUrl} alt={problemSet.alt} />
                 <h3 className='select-none'>{problemSet.title}</h3>
@@ -57,7 +57,7 @@ const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, fi
                     </div>
                 </div>
             </div>          
-        </div>
+        </>
     )
 }
 export default ProblemListDropdown;

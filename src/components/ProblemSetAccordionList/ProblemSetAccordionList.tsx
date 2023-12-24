@@ -25,7 +25,7 @@ const ProblemSetAccordionList:React.FC<ProblemSetAccordionListProps> = () => {
     }
 
     return (
-        <div className='relative overflow-x-auto mx-auto px-6 pb-10'>
+        <div className='relative mx-auto px-6 pb-10 flex-grow overflow-auto'>
             {loading && (
                 <div className="max-w-[1200px] mx-auto sm:w-7/12 w-full animate-pulse">
                     {[...Array(10)].map((_, i) => (
