@@ -14,7 +14,7 @@ const sideNavProblemSetsModal:React.FC<sideNavProblemSetsModalProps> = () => {
 
     return (
         <>
-            <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-60' onClick={closeModal}></div>
+            <div className='absolute top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-60 z-20' onClick={closeModal}></div>
             <div className='fixed inset-y-0 left-0 z-30 bg-dark-layer-2 w-1/3'>
                 <div className='flex flex-col'>
                     <div className='flex justify-between p-2'>

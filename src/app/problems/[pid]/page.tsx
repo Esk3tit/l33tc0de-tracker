@@ -29,9 +29,9 @@ const ProblemPage:React.FC<ProblemPageProps> = ({ params }) => {
 	}
 
     return <div>
-        {sideNavProblemSetsModal.isOpen && <SideNavProblemSetsModal />}
         <Topbar problemPage />
         <Workspace problem={problem} />
+        {sideNavProblemSetsModal.isOpen && <SideNavProblemSetsModal />}
     </div>
 }
 export default ProblemPage;
