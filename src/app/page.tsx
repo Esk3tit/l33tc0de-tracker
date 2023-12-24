@@ -1,13 +1,11 @@
 'use client'
 
 import Topbar from "@/components/Topbar/Topbar";
-import React, { useEffect, useState } from "react";
-import { auth, firestore } from '@/firebase/firebase';
-import { DBProblem } from '@/utils/types/problem';
-import { collection, doc, getDoc, getDocs, orderBy, query } from 'firebase/firestore';
-import { useAuthState } from 'react-firebase-hooks/auth';
+import React, { useState } from "react";
 import { problemSets } from "@/data/problemSets";
 import ProblemListDropdown from "@/components/Dropdowns/ProblemListDropdown";
+import useGetSolvedProblems from "@/hooks/useGetSolvedProblems";
+import useGetProblems from "@/hooks/useGetProblems";
 
 export default function Home() {
 
@@ -69,48 +67,3 @@ const LoadingSkeleton = () => {
 		</div>
 	);
 };
-
-function useGetProblems(setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
-  const [problems, setProblems] = useState<DBProblem[]>([]);
-
-  useEffect(() => {
-      const getProblems = async () => {
-          setLoading(true);
-          const q = query(collection(firestore, 'problems'), orderBy('order', 'asc'));
-          const querySnapshot = await getDocs(q);
-          const temp: DBProblem[] = [];
-          querySnapshot.forEach((doc) => {
-              temp.push({ id: doc.id, ...doc.data() } as DBProblem);
-          });
-          setProblems(temp);
-          setLoading(false);
-      };
-
-      getProblems();
-  }, [setLoading]);
-
-  return problems;
-}
-
-function useGetSolvedProblems() {
-  const [solvedProblems, setSolvedProblems] = useState<string[]>([]);
-  const [user] = useAuthState(auth);
-
-  useEffect(() => {
-      const getSolvedProblems = async () => {
-          const userRef = doc(firestore, 'users', user!.uid);
-          const userSnap = await getDoc(userRef);
-          if (userSnap.exists()) {
-              const data = userSnap.data();
-              if (data) {
-                  setSolvedProblems(data.solvedProblems);
-              }
-          }
-      };
-
-      if (user) getSolvedProblems();
-      if (!user) setSolvedProblems([]);
-  }, [user]);
-
-  return solvedProblems;
-}

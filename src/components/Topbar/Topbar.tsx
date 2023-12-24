@@ -16,6 +16,7 @@ import { problems } from '@/utils/problems';
 import { Problem } from '@/utils/types/problem';
 import useGetUserData from '@/hooks/useGetUserData';
 import { problemSets } from '@/data/problemSets';
+import { sideNavProblemSetsState } from '@/atoms/sideNavProblemSets';
 
 type TopbarProps = {
     problemPage?: boolean;
@@ -28,15 +29,16 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
     const { role } = useGetUserData();
 
     const setAuthModalState = useSetRecoilState(authModalState);
+    const setSideNavProblemSetsModalState = useSetRecoilState(sideNavProblemSetsState);
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
+    const problemSetId = searchParams.get("set");
+    const selectedSet = problemSets.find(set => set.id === problemSetId);
 
     const handleProblemChange = (isForward: boolean) => {
         const pid = pathname.split("/")[2];
-        const problemSetId = searchParams.get("set");
         const { order } = problems[pid] as Problem;
-        const selectedSet = problemSets.find(set => set.id === problemSetId);
         const selectedSetProblems = selectedSet ? Array.from(selectedSet.problems) : Object.keys(problems);
 
         const sortedProblemOrders = selectedSetProblems.map(pid => (problems[pid] as Problem).order).sort((a, b) => a - b);
@@ -55,10 +57,32 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
 
     return (
         <nav className='relative flex h-[50px] w-full shrink-0 items-center px-5 bg-dark-layer-1 text-dark-gray-7'>
-            <div className={`flex w-full items-center justify-between ${!problemPage ? "max-w-[1200px] mx-auto" : ""}`}>
-                <Link href='/' className='flex-1'>
-                    <Image src='/steamhappy.png' alt='Logo' height={75} width={75} />
-                </Link>
+            <div className={`flex w-full items-center justify-between ${!problemPage ? "mx-auto" : ""}`}>
+                <div className='flex justify-between w-[300px]'>
+                    <Link href='/' className='flex-1'>
+                        <Image src='/steamhappy.png' alt='Logo' height={75} width={75} />
+                    </Link>
+                    {problemPage && (
+                        <button
+                            className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded hover:bg-dark-fill-2 flex'
+                            onClick={() => setSideNavProblemSetsModalState((prev) => ({ ...prev, isOpen: true }))}
+                        >
+                            {selectedSet ? (
+                                <>
+                                <Image
+                                    src={selectedSet.imageUrl}
+                                    width={200}
+                                    height={200}
+                                    alt='problem set logo'
+                                    className='object-contain max-w-full max-h-full'
+                                /> <span>{selectedSet!.title}</span>
+                                </>
+                            ) : (
+                                'Select Problem Set'
+                            )}
+                        </button>
+                    )}
+                </div>
 
                 {problemPage && (
                     <div className='flex items-center gap-4 flex-1 justify-center'>
@@ -81,7 +105,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
                     </div>
                 )}
 
-                <div className='flex items-center space-x-4 flex-1 justify-end'>
+                <div className='flex items-center space-x-2 justify-end'>
                     <div>
                         <a
                             href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
@@ -97,12 +121,12 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
                         <>
                             {role === 'admin' && pathname !== "/dashboard" && (
                                 <Link href='/dashboard'>
-                                    <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Dashboard</button>
+                                    <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded hover:bg-dark-fill-2'>Dashboard</button>
                                 </Link>
                             )}
                             {role === 'admin' && pathname === "/dashboard" && (
                                 <Link href='/'>
-                                    <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Problems</button>
+                                    <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded hover:bg-dark-fill-2'>Problems</button>
                                 </Link>
                             )}
                             <div className='cursor-pointer group relative'>

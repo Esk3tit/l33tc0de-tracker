@@ -1,5 +1,7 @@
 'use client'
 
+import { sideNavProblemSetsState } from '@/atoms/sideNavProblemSets';
+import SideNavProblemSetsModal from '@/components/Modals/sideNavProblemSetsModal';
 import Topbar from '@/components/Topbar/Topbar';
 import Workspace from '@/components/Workspace/Workspace';
 import useHasMounted from '@/hooks/useHasMounted';
@@ -7,6 +9,7 @@ import { problems } from '@/utils/problems';
 import { Problem } from '@/utils/types/problem';
 import { notFound } from 'next/navigation';
 import React from 'react';
+import { useRecoilValue } from 'recoil';
 
 type ProblemPageProps = {
     params: { pid: string }
@@ -14,6 +17,7 @@ type ProblemPageProps = {
 
 const ProblemPage:React.FC<ProblemPageProps> = ({ params }) => {
     const hasMounted = useHasMounted();
+    const sideNavProblemSetsModal = useRecoilValue(sideNavProblemSetsState);
 
     if (!hasMounted) return null;
 
@@ -25,6 +29,7 @@ const ProblemPage:React.FC<ProblemPageProps> = ({ params }) => {
 	}
 
     return <div>
+        {sideNavProblemSetsModal.isOpen && <SideNavProblemSetsModal />}
         <Topbar problemPage />
         <Workspace problem={problem} />
     </div>
