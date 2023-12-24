@@ -1,8 +1,7 @@
-import { sideNavProblemSetsState } from '@/atoms/sideNavProblemSets';
 import React, { useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
-import { useSetRecoilState } from 'recoil';
 import ProblemSetAccordionList from '../ProblemSetAccordionList/ProblemSetAccordionList';
+import useCloseModal from '@/hooks/useCloseModal';
 
 type sideNavProblemSetsModalProps = {
     
@@ -27,7 +26,7 @@ const sideNavProblemSetsModal:React.FC<sideNavProblemSetsModalProps> = () => {
                             <IoClose className='h-5 w-5' />
                         </button>
                     </div>
-                    <ProblemSetAccordionList />
+                    <ProblemSetAccordionList withModal />
                 </div>
             </div>
         </>
@@ -46,22 +45,3 @@ export default sideNavProblemSetsModal;
 // 		</div>
 // 	);
 // };
-
-function useCloseModal() {
-    const setSideNavProblemSetsModalState = useSetRecoilState(sideNavProblemSetsState);
-
-    const closeModal = () => {
-        setSideNavProblemSetsModalState((prev) => ({...prev, isOpen: false}));
-    };
-    
-    useEffect(() => {
-        const handleEsc = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') closeModal();
-        };
-
-        window.addEventListener('keydown', handleEsc);
-        return () => window.removeEventListener('keydown', handleEsc);
-    }, []);
-
-    return closeModal;
-}

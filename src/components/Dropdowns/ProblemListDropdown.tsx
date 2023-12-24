@@ -6,9 +6,10 @@ type ProblemListDropdownProps = {
     problemSet: ProblemSet;
     filterProblemsForProblemSet: (setId: string) => DBProblem[];
     filterSolvedProblemsForProblemSet: (setId: string) => string[];
+    withModal?: boolean;
 };
 
-const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, filterProblemsForProblemSet, filterSolvedProblemsForProblemSet }) => {
+const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, filterProblemsForProblemSet, filterSolvedProblemsForProblemSet, withModal }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [problems, setProblems] = useState<DBProblem[]>(filterProblemsForProblemSet(problemSet.id));
     const [solvedProblems, setSolvedProblems] = useState<Set<string>>(new Set(filterSolvedProblemsForProblemSet(problemSet.id)));
@@ -52,7 +53,7 @@ const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, fi
                                     </th>
                                 </tr>
                             </thead>
-                            <ProblemsTable problemSetId={problemSet.id} problems={problems} solvedProblems={solvedProblems} />
+                            <ProblemsTable problemSetId={problemSet.id} problems={problems} solvedProblems={solvedProblems} withModal />
                         </table>
                     </div>
                 </div>

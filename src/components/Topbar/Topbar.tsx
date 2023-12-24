@@ -64,19 +64,19 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
                     </Link>
                     {problemPage && (
                         <button
-                            className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded hover:bg-dark-fill-2 flex'
+                            className='bg-dark-fill-3 py-1 px-4 cursor-pointer rounded hover:bg-dark-fill-2 flex'
                             onClick={() => setSideNavProblemSetsModalState((prev) => ({ ...prev, isOpen: true }))}
                         >
                             {selectedSet ? (
-                                <>
+                                <div className='flex items-center justify-between gap-4'>
                                 <Image
                                     src={selectedSet.imageUrl}
-                                    width={200}
-                                    height={200}
+                                    width={20}
+                                    height={20}
                                     alt='problem set logo'
                                     className='object-contain max-w-full max-h-full'
                                 /> <span>{selectedSet!.title}</span>
-                                </>
+                                </div>
                             ) : (
                                 'Select Problem Set'
                             )}

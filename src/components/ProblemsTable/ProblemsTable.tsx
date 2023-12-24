@@ -1,20 +1,22 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { BsCheckCircle } from 'react-icons/bs';
 import { AiFillYoutube } from 'react-icons/ai';
 import Link from 'next/link';
 import { IoClose } from 'react-icons/io5';
 import YouTube from 'react-youtube';
 import { DBProblem } from '@/utils/types/problem';
+import useCloseModal from '@/hooks/useCloseModal';
 
 type ProblemsTableProps = {
     problems: DBProblem[];
     solvedProblems: Set<string>;
     problemSetId: string;
+    withModal?: boolean;
 };
 
-const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems, problemSetId }) => {
+const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems, problemSetId, withModal }) => {
 
     const [youtubePlayer, setYoutubePlayer] = useState({
         isOpen: false,
@@ -24,6 +26,8 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems,
     const closeModal = () => {
         setYoutubePlayer({ isOpen: false, videoId: '' });
     };
+
+    const closeSideNavProblemSetsModal = useCloseModal();
 
     useEffect(() => {
         const handleEsc = (e: KeyboardEvent) => {
@@ -51,9 +55,17 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems,
                                         {problem.title}
                                     </Link>
                                 ) : (
-                                    <Link className='hover:text-blue-600 cursor-pointer' href={`/problems/${problem.id}?set=${problemSetId}`}>
-                                        {problem.title}
-                                    </Link>
+                                    <>
+                                        {withModal ? (
+                                            <Link className='hover:text-blue-600 cursor-pointer' onClick={closeSideNavProblemSetsModal} href={`/problems/${problem.id}?set=${problemSetId}`}>
+                                                {problem.title}
+                                            </Link>
+                                        ) : (
+                                            <Link className='hover:text-blue-600 cursor-pointer' href={`/problems/${problem.id}?set=${problemSetId}`}>
+                                                {problem.title}
+                                            </Link>
+                                        )}
+                                    </>
                                 )}
                             </td>
                             <td className={`px-6 py-4 ${difficultyColor}`}>

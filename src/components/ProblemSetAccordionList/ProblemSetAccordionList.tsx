@@ -5,10 +5,10 @@ import React, { useState } from 'react';
 import ProblemListDropdown from '../Dropdowns/ProblemListDropdown';
 
 type ProblemSetAccordionListProps = {
-    
+    withModal?: boolean;
 };
 
-const ProblemSetAccordionList:React.FC<ProblemSetAccordionListProps> = () => {
+const ProblemSetAccordionList:React.FC<ProblemSetAccordionListProps> = ({ withModal }) => {
     
     const [loading, setLoading] = useState(true);
     const allProblems = useGetProblems(setLoading);
@@ -40,6 +40,7 @@ const ProblemSetAccordionList:React.FC<ProblemSetAccordionListProps> = () => {
                             problemSet={problemSet}
                             filterProblemsForProblemSet={filterProblemsForProblemSet}
                             filterSolvedProblemsForProblemSet={filterSolvedProblemsForProblemSet}
+                            withModal
                         />
                     ))}
                 </div>
