@@ -37,5 +37,5 @@ It is <strong>guaranteed</strong> that the answer is <strong>unique</strong>.
 </li>`,
     starterCode: starterCodeTopKFrequentElements,
     order: 347,
-    followUp: "Your algorithm's time complexity must be better than O(n log n), where n is the array's size."
+    followUp: "Your algorithm's time complexity must be better than <code>O(n log n)</code>, where n is the array's size."
 }

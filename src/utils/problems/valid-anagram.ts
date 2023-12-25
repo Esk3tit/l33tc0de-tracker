@@ -1,7 +1,7 @@
 import { Problem } from "../types/problem";
 
 const starterCodeValidAnagram = `class Solution:
-def containsDuplicate(self, nums: List[int]) -> bool:
+def isAnagram(self, s: str, t: str) -> bool:
 
 `;
 

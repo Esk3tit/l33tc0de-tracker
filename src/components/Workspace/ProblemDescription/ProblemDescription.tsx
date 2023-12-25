@@ -255,7 +255,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, solved
                                             {example.outputText} <br />
                                             {example.explanation && (
                                                 <>
-                                                    <strong>Explanation:</strong> {example.explanation}
+                                                    <strong>Explanation:</strong> <span dangerouslySetInnerHTML={{ __html: example.explanation }} />
                                                 </>
                                             )}
                                         </pre>
@@ -275,7 +275,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, solved
                         {/* Optional follow up */}
                         {problem.followUp && (
                             <div className='text-white text-sm'>
-                                <strong className='text-white'>Follow up:</strong> {problem.followUp}
+                                <strong className='text-white'>Follow up:</strong> <span dangerouslySetInnerHTML={{ __html: problem.followUp }} />
                             </div>
                         )}
                     </div>

@@ -40,5 +40,5 @@ The product of any prefix or suffix of <code>nums</code> is <strong>guaranteed</
 </li>`,
     starterCode: starterCodeProductOfArrayExceptSelf,
     order: 238,
-    followUp: "Can you solve the problem in O(1) extra space complexity? (The output array does not count as extra space for space complexity analysis.)"
+    followUp: "Can you solve the problem in <code>O(1)</code> extra space complexity? (The output array <strong>does not</strong> count as extra space for space complexity analysis.)"
 }
