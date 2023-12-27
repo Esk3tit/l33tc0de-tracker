@@ -126,3 +126,7 @@ code {
 .inside-accordion {
 	overflow: hidden;
 }
+
+.no-lh {
+	line-height: 0px;
+}

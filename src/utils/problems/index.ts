@@ -7,6 +7,9 @@ import { topKFrequentElements } from "./top-k-frequent-elements";
 import { productOfArrayExceptSelf } from "./product-of-array-except-self";
 import { encodeAndDecodeStrings } from "./encode-and-decode-strings";
 import { longestConsecutiveSequence } from "./longest-consecutive-sequence";
+import { validPalindrome } from "./valid-palindrome";
+import { _3sum } from "./3sum";
+import { containerWithMostWater } from "./container-with-most-water";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -21,4 +24,7 @@ export const problems: ProblemMap = {
     "product-of-array-except-self": productOfArrayExceptSelf,
     "encode-and-decode-strings": encodeAndDecodeStrings,
     "longest-consecutive-sequence": longestConsecutiveSequence,
+    "valid-palindrome": validPalindrome,
+    "3sum": _3sum,
+    "container-with-most-water": containerWithMostWater,
 }
