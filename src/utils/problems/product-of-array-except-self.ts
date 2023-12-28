@@ -30,7 +30,7 @@ export const productOfArrayExceptSelf: Problem = {
         },
     ],
     constraints: `<li class='mt-2'>
-<code>2 <= nums.length <= 10^5</code>
+<code>2 <= nums.length <= 10<sup>5</sup></code>
 </li>
 <li class='mt-2'>
 <code>-30 <= nums[i] <= 30</code>
