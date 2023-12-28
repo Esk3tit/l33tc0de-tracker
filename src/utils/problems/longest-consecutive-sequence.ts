@@ -28,9 +28,9 @@ You must write an algorithm that runs in <code>O(n)</code> time.
         },
     ],
     constraints: `<li class='mt-2'>
-<code>0 <= nums.length <= 10^5</code>
+<code>0 <= nums.length <= 10<sup>5</sup></code>
 </li> <li class='mt-2'>
-<code>-10^9 <= nums[i] <= 10^9</code>
+<code>-10<sup>9</sup> <= nums[i] <= 10<sup>9</sup></code>
 </li>`,
     starterCode: starterCodeLongestConsecutiveSequence,
     order: 128,

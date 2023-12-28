@@ -31,9 +31,9 @@ export const containsDuplicate: Problem = {
         },
     ],
     constraints: `<li class='mt-2'>
-<code>1 <= nums.length <= 10^5</code>
+<code>1 <= nums.length <= 10<sup>5</sup></code>
 </li> <li class='mt-2'>
-<code>-10^9 <= nums[i] <= 10^9</code>
+<code>-10<sup>9</sup> <= nums[i] <= 10<sup>9</sup></code>
 </li>`,
     starterCode: starterCodeContainsDuplicate,
     order: 217

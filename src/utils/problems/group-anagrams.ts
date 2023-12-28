@@ -32,7 +32,7 @@ An <strong>Anagram</strong> is a word or phrase formed by rearranging the letter
         },
     ],
     constraints: `<li class='mt-2'>
-<code>1 <= strs.length <= 10^4</code>
+<code>1 <= strs.length <= 10<sup>4</sup></code>
 </li>
 <li class='mt-2'>
 <code>0 <= strs[i].length <= 100</code>

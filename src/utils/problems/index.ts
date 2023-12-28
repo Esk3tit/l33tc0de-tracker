@@ -10,6 +10,10 @@ import { longestConsecutiveSequence } from "./longest-consecutive-sequence";
 import { validPalindrome } from "./valid-palindrome";
 import { _3sum } from "./3sum";
 import { containerWithMostWater } from "./container-with-most-water";
+import { bestTimeToBuyAndSellStock } from "./best-time-to-buy-and-sell-stock";
+import { longestSubstringWithoutRepeatingCharacters } from "./longest-substring-without-repeating-characters";
+import { longestRepeatingCharacterReplacement } from "./longest-repeating-character-replacement";
+import { minimumWindowSubstring } from "./minimum-window-substring";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -27,4 +31,8 @@ export const problems: ProblemMap = {
     "valid-palindrome": validPalindrome,
     "3sum": _3sum,
     "container-with-most-water": containerWithMostWater,
+    "best-time-to-buy-and-sell-stock": bestTimeToBuyAndSellStock,
+    "longest-substring-without-repeating-characters": longestSubstringWithoutRepeatingCharacters,
+    "longest-repeating-character-replacement": longestRepeatingCharacterReplacement,
+    "minimum-window-substring": minimumWindowSubstring,
 }
