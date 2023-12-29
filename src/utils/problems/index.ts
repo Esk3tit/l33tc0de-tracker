@@ -14,6 +14,9 @@ import { bestTimeToBuyAndSellStock } from "./best-time-to-buy-and-sell-stock";
 import { longestSubstringWithoutRepeatingCharacters } from "./longest-substring-without-repeating-characters";
 import { longestRepeatingCharacterReplacement } from "./longest-repeating-character-replacement";
 import { minimumWindowSubstring } from "./minimum-window-substring";
+import { validParentheses } from "./valid-parentheses";
+import { findMinimumInRotatedSortedArray } from "./find-minimum-in-rotated-sorted-array";
+import { searchInRotatedSortedArray } from "./search-in-rotated-sorted-array";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -35,4 +38,7 @@ export const problems: ProblemMap = {
     "longest-substring-without-repeating-characters": longestSubstringWithoutRepeatingCharacters,
     "longest-repeating-character-replacement": longestRepeatingCharacterReplacement,
     "minimum-window-substring": minimumWindowSubstring,
+    "valid-parentheses": validParentheses,
+    "find-minimum-in-rotated-sorted-array": findMinimumInRotatedSortedArray,
+    "search-in-rotated-sorted-array": searchInRotatedSortedArray,
 }
