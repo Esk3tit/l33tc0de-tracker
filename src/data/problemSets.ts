@@ -6,7 +6,8 @@ const neetcode75 = [
     "valid-palindrome", "3sum", "container-with-most-water", "best-time-to-buy-and-sell-stock",
     "longest-substring-without-repeating-characters", "longest-repeating-character-replacement",
     "minimum-window-substring", "valid-parentheses", "find-minimum-in-rotated-sorted-array",
-    "search-in-rotated-sorted-array"
+    "search-in-rotated-sorted-array", "reverse-linked-list", "merge-two-sorted-lists", "reorder-list",
+    
 ]
 
 export const problemSets: ProblemSet[] = [

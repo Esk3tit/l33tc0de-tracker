@@ -274,7 +274,7 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem, solved
 
                         {/* Optional follow up */}
                         {problem.followUp && (
-                            <div className='text-white text-sm'>
+                            <div className='text-white text-sm my-8'>
                                 <strong className='text-white'>Follow up:</strong> <span dangerouslySetInnerHTML={{ __html: problem.followUp }} />
                             </div>
                         )}

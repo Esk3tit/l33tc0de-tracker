@@ -17,6 +17,9 @@ import { minimumWindowSubstring } from "./minimum-window-substring";
 import { validParentheses } from "./valid-parentheses";
 import { findMinimumInRotatedSortedArray } from "./find-minimum-in-rotated-sorted-array";
 import { searchInRotatedSortedArray } from "./search-in-rotated-sorted-array";
+import { reverseLinkedList } from "./reverse-linked-list";
+import { mergeTwoSortedLists } from "./merge-two-sorted-lists";
+import { reorderList } from "./reorder-list";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -41,4 +44,7 @@ export const problems: ProblemMap = {
     "valid-parentheses": validParentheses,
     "find-minimum-in-rotated-sorted-array": findMinimumInRotatedSortedArray,
     "search-in-rotated-sorted-array": searchInRotatedSortedArray,
+    "reverse-linked-list": reverseLinkedList,
+    "merge-two-sorted-lists": mergeTwoSortedLists,
+    "reorder-list": reorderList,
 }
