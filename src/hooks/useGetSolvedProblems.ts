@@ -3,12 +3,13 @@ import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-function useGetSolvedProblems() {
+function useGetSolvedProblems(setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
     const [solvedProblems, setSolvedProblems] = useState<string[]>([]);
     const [user] = useAuthState(auth);
 
     useEffect(() => {
         const getSolvedProblems = async () => {
+            setLoading(true);
             const userRef = doc(firestore, 'users', user!.uid);
             const userSnap = await getDoc(userRef);
             if (userSnap.exists()) {
@@ -17,11 +18,12 @@ function useGetSolvedProblems() {
                     setSolvedProblems(data.solvedProblems);
                 }
             }
+            setLoading(false);
         };
 
         if (user) getSolvedProblems();
         if (!user) setSolvedProblems([]);
-    }, [user]);
+    }, [user, setLoading]);
 
     return solvedProblems;
 }

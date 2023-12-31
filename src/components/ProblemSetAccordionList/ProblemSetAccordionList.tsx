@@ -10,9 +10,10 @@ type ProblemSetAccordionListProps = {
 
 const ProblemSetAccordionList:React.FC<ProblemSetAccordionListProps> = ({ withModal }) => {
     
-    const [loading, setLoading] = useState(true);
-    const allProblems = useGetProblems(setLoading);
-    const userSolvedProblems = useGetSolvedProblems();
+    const [loadingProblems, setLoadingProblems] = useState(true);
+    const [loadingSolved, setLoadingSolved] = useState(true);
+    const allProblems = useGetProblems(setLoadingProblems);
+    const userSolvedProblems = useGetSolvedProblems(setLoadingSolved);
 
     const filterProblemsForProblemSet = (setId: string) => {
         const problemsInSet = problemSets.find(set => set.id === setId)!.problems;
@@ -26,13 +27,13 @@ const ProblemSetAccordionList:React.FC<ProblemSetAccordionListProps> = ({ withMo
 
     return (
         <div className='relative mx-auto px-6 pb-10 flex-grow overflow-auto'>
-            {loading && (
+            {(loadingProblems || loadingSolved) && (
                 <div className="max-w-[1200px] mx-auto sm:w-7/12 w-full animate-pulse">
                     {[...Array(10)].map((_, i) => (
                         <LoadingSkeleton key={i} />
                     ))}
                 </div>)}
-            {!loading && (
+            {(!loadingProblems && !loadingSolved) && (
                 <div className='flex flex-col'>
                     {problemSets.map(problemSet => (
                         <ProblemListDropdown
