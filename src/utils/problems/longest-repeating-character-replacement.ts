@@ -2,19 +2,18 @@ import { Problem } from "../types/problem";
 
 const starterCodeLongestRepeatingCharacterReplacement = `class Solution:
 def characterReplacement(self, s: str, k: int) -> int:
-
 `;
 
 export const longestRepeatingCharacterReplacement: Problem = {
     id: "longest-repeating-character-replacement",
     title: "424. Longest Repeating Character Replacement",
     problemStatement: `
-    <p class='mt-3'>
-    You are given a string <code>s</code> and an integer <code>k</code>. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most <code>k</code> times.
+<p class='mt-3'>
+You are given a string <code>s</code> and an integer <code>k</code>. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most <code>k</code> times.
 </p>
-    <p class='mt-3'>
-    Return <em>the length of the longest substring containing the same letter you can get after performing the above operations.</em>
-    </p>`,
+<p class='mt-3'>
+Return <em>the length of the longest substring containing the same letter you can get after performing the above operations.</em>
+</p>`,
     examples: [
         {
             id: 1,

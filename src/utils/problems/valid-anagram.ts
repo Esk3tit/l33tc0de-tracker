@@ -2,15 +2,15 @@ import { Problem } from "../types/problem";
 
 const starterCodeValidAnagram = `class Solution:
 def isAnagram(self, s: str, t: str) -> bool:
-
 `;
 
 export const validAnagram: Problem = {
     id: "valid-anagram",
     title: "242. Valid Anagram",
-    problemStatement: `<p class='mt-3'>
-    Given two strings <code>s</code> and <code>t</code>, return <code>true</code> <em>if <code>t</code> is an anagram of <code>s</code>, and <code>false</code> otherwise</em>.
-  </p>
+    problemStatement: `
+<p class='mt-3'>
+Given two strings <code>s</code> and <code>t</code>, return <code>true</code> <em>if <code>t</code> is an anagram of <code>s</code>, and <code>false</code> otherwise</em>.
+</p>
 <p class='mt-3'>
 An <strong>Anagram</strong> is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
 </p>`,

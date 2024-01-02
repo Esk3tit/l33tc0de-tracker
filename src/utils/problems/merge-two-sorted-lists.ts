@@ -2,7 +2,6 @@ import { Problem } from "../types/problem";
 
 const starterCodeMergeTwoSortedLists = `class Solution:
 def mergeTwoLists(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]
-
 `;
 
 export const mergeTwoSortedLists: Problem = {

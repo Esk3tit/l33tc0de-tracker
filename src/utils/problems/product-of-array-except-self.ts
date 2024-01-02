@@ -2,21 +2,20 @@ import { Problem } from "../types/problem";
 
 const starterCodeProductOfArrayExceptSelf = `class Solution:
 def productExceptSelf(self, nums: List[int]) -> List[int]:
-
 `;
 
 export const productOfArrayExceptSelf: Problem = {
     id: "product-of-array-except-self",
     title: "238. Product of Array Except Self",
     problemStatement: `<p class='mt-3'>
-    Given an integer array <code>nums</code>, return <em>an array <code>answer</code> such that <code>answer[i]</code> is equal to the product of all the elements of <code>nums</code> except <code>nums[i]</code></em>.
-  </p>
-  <p class='mt-3'>
-  The product of any prefix or suffix of <code>nums</code> is <strong>guaranteed</strong> to fit in a <strong>32-bit</strong> integer.
-  </p>
-  <p class='mt-3'>
-  You must write an algorithm that runs in <code>O(n)</code> time and without using the division operation.
-  </p>`,
+Given an integer array <code>nums</code>, return <em>an array <code>answer</code> such that <code>answer[i]</code> is equal to the product of all the elements of <code>nums</code> except <code>nums[i]</code></em>.
+</p>
+<p class='mt-3'>
+The product of any prefix or suffix of <code>nums</code> is <strong>guaranteed</strong> to fit in a <strong>32-bit</strong> integer.
+</p>
+<p class='mt-3'>
+You must write an algorithm that runs in <code>O(n)</code> time and without using the division operation.
+</p>`,
     examples: [
         {
             id: 1,

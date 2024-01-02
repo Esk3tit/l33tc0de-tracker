@@ -2,22 +2,21 @@ import { Problem } from "../types/problem";
 
 const starterCodeBestTimeToBuyAndSellStock = `class Solution:
 def maxProfit(self, prices: List[int]) -> int:
-
 `;
 
 export const bestTimeToBuyAndSellStock: Problem = {
     id: "best-time-to-buy-and-sell-stock",
     title: "121. Best Time to Buy and Sell Stock",
     problemStatement: `
-    <p class='mt-3'>
-    You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the <code>i<sup>th</sup></code> day.
+<p class='mt-3'>
+You are given an array <code>prices</code> where <code>prices[i]</code> is the price of a given stock on the <code>i<sup>th</sup></code> day.
 </p>
-    <p class='mt-3'>
-    You want to maximize your profit by choosing a <strong>single day</strong> to buy one stock and choosing a <strong>different day in the future</strong> to sell that stock.
+<p class='mt-3'>
+You want to maximize your profit by choosing a <strong>single day</strong> to buy one stock and choosing a <strong>different day in the future</strong> to sell that stock.
 </p>
-    <p class='mt-3'>
-    Return <em>the maximum profit you can achieve from this transaction</em>. If you cannot achieve any profit, return <code>0</code>.
-    </p>`,
+<p class='mt-3'>
+Return <em>the maximum profit you can achieve from this transaction</em>. If you cannot achieve any profit, return <code>0</code>.
+</p>`,
     examples: [
         {
             id: 1,

@@ -2,7 +2,6 @@ import { Problem } from "../types/problem";
 
 const starterCodeReorderList = `class Solution:
 def reorderList(self, head: Optional[ListNode]) -> None:
-
 `;
 
 export const reorderList: Problem = {

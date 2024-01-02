@@ -14,15 +14,15 @@ def encode(self, strs):
 """
 def decode(self, str):
     # write your code here
-
 `;
 
 export const encodeAndDecodeStrings: Problem = {
     id: "encode-and-decode-strings",
     title: "271. Encode and Decode Strings",
-    problemStatement: `<p class='mt-3'>
-    Design an algorithm to encode <strong>a list of strings</strong> to <strong>a string</strong>. The encoded string is then sent over the network and is decoded back to the original list of strings.
-  </p>
+    problemStatement: `
+<p class='mt-3'>
+Design an algorithm to encode <strong>a list of strings</strong> to <strong>a string</strong>. The encoded string is then sent over the network and is decoded back to the original list of strings.
+</p>
 <p class='mt-3'>
 Machine 1 (sender) has the function:
 </p>

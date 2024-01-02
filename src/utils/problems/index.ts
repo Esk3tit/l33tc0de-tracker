@@ -20,6 +20,9 @@ import { searchInRotatedSortedArray } from "./search-in-rotated-sorted-array";
 import { reverseLinkedList } from "./reverse-linked-list";
 import { mergeTwoSortedLists } from "./merge-two-sorted-lists";
 import { reorderList } from "./reorder-list";
+import { removeNthNodeFromEndOfList } from "./remove-nth-node-from-end-of-list";
+import { linkedListCycle } from "./linked-list-cycle";
+import { mergeKSortedLists } from "./merge-k-sorted-lists";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -47,4 +50,7 @@ export const problems: ProblemMap = {
     "reverse-linked-list": reverseLinkedList,
     "merge-two-sorted-lists": mergeTwoSortedLists,
     "reorder-list": reorderList,
+    "remove-nth-node-from-end-of-list": removeNthNodeFromEndOfList,
+    "linked-list-cycle": linkedListCycle,
+    "merge-k-sorted-lists": mergeKSortedLists,
 }

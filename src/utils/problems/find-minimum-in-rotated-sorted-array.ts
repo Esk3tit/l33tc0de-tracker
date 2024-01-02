@@ -2,15 +2,15 @@ import { Problem } from "../types/problem";
 
 const starterCodeFindMinimumInRotatedSortedArray = `class Solution:
 def findMin(self, nums: List[int]) -> int:
-
 `;
 
 export const findMinimumInRotatedSortedArray: Problem = {
     id: "find-minimum-in-rotated-sorted-array",
     title: "153. Find Minimum in Rotated Sorted Array",
-    problemStatement: `<p class='mt-3'>
-    Suppose an array of length <code>n</code> sorted in ascending order is <strong>rotated</strong> between <code>1</code> and <code>n</code> times. For example, the array <code>nums = [0,1,2,4,5,6,7]</code> might become:
-  </p>
+    problemStatement: `
+<p class='mt-3'>
+Suppose an array of length <code>n</code> sorted in ascending order is <strong>rotated</strong> between <code>1</code> and <code>n</code> times. For example, the array <code>nums = [0,1,2,4,5,6,7]</code> might become:
+</p>
 <ul class='mt-3 pl-1 list-disc'>
     <li><code>[4,5,6,7,0,1,2]</code> if it was rotated <code>4</code> times.</li>
     <li><code>[0,1,2,4,5,6,7]</code> if it was rotated <code>7</code> times.</li>

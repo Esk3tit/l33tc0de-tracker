@@ -2,15 +2,14 @@ import { Problem } from "../types/problem";
 
 const starterCodeLongestSubstringWithoutRepeatingCharacters = `class Solution:
 def lengthOfLongestSubstring(self, s: str) -> int:
-
 `;
 
 export const longestSubstringWithoutRepeatingCharacters: Problem = {
     id: "longest-substring-without-repeating-characters",
     title: "3. Longest Substring Without Repeating Characters",
     problemStatement: `
-    <p class='mt-3'>
-    Given a string <code>s</code>, find the length of the <strong>longest substring</strong> without repeating characters.
+<p class='mt-3'>
+Given a string <code>s</code>, find the length of the <strong>longest substring</strong> without repeating characters.
 </p>`,
     examples: [
         {

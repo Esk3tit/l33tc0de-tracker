@@ -2,18 +2,17 @@ import { Problem } from "../types/problem";
 
 const starterCode3Sum = `class Solution:
 def threeSum(self, nums: List[int]) -> List[List[int]]:
-
 `;
 
 export const _3sum: Problem = {
     id: "3sum",
     title: "15. 3Sum",
     problemStatement: `
-    <p class='mt-3'>
-    Given an integer array <code>nums</code>, return all the triplets <code>[nums[i], nums[j], nums[k]]</code> such that <code>i != j</code>, <code>i != k</code>, and <code>j != k</code>, and <code>nums[i] + nums[j] + nums[k] == 0</code>.
+<p class='mt-3'>
+Given an integer array <code>nums</code>, return all the triplets <code>[nums[i], nums[j], nums[k]]</code> such that <code>i != j</code>, <code>i != k</code>, and <code>j != k</code>, and <code>nums[i] + nums[j] + nums[k] == 0</code>.
 </p>
-    <p class='mt-3'>
-    Notice that the solution set must not contain duplicate triplets.
+<p class='mt-3'>
+Notice that the solution set must not contain duplicate triplets.
 </p>`,
     examples: [
         {

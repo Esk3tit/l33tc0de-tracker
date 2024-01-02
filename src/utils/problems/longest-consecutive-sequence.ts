@@ -2,15 +2,15 @@ import { Problem } from "../types/problem";
 
 const starterCodeLongestConsecutiveSequence = `class Solution:
 def longestConsecutive(self, nums: List[int]) -> int:
-
 `;
 
 export const longestConsecutiveSequence: Problem = {
     id: "longest-consecutive-sequence",
     title: "128. Longest Consecutive Sequence",
-    problemStatement: `<p class='mt-3'>
-    Given an unsorted array of integers <code>nums</code>, return <em>the length of the longest consecutive elements sequence</em>.
-  </p>
+    problemStatement: `
+<p class='mt-3'>
+Given an unsorted array of integers <code>nums</code>, return <em>the length of the longest consecutive elements sequence</em>.
+</p>
 <p class='mt-3'>
 You must write an algorithm that runs in <code>O(n)</code> time.
 </p>`,

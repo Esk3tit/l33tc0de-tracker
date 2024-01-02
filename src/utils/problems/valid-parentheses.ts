@@ -2,15 +2,15 @@ import { Problem } from "../types/problem";
 
 const starterCodeValidParentheses = `class Solution:
 def isValid(self, s: str) -> bool:
-
 `;
 
 export const validParentheses: Problem = {
     id: "valid-parentheses",
     title: "20. Valid Parentheses",
-    problemStatement: `<p class='mt-3'>
-    Given a string <code>s</code> containing just the characters <code>'('</code>, <code>')'</code>, <code>'{'</code>, <code>'}'</code>, <code>'['</code> and <code>']'</code>, determine if the input string is valid.
-  </p>
+    problemStatement: `
+<p class='mt-3'>
+Given a string <code>s</code> containing just the characters <code>'('</code>, <code>')'</code>, <code>'{'</code>, <code>'}'</code>, <code>'['</code> and <code>']'</code>, determine if the input string is valid.
+</p>
 <p class='mt-3'>
 An input string is valid if:
 </p>

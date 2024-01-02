@@ -2,15 +2,15 @@ import { Problem } from "../types/problem";
 
 const starterCodeGroupAnagrams = `class Solution:
 def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-
 `;
 
 export const groupAnagrams: Problem = {
     id: "group-anagrams",
     title: "49. Group Anagrams",
-    problemStatement: `<p class='mt-3'>
-    Given an array of strings <code>strs</code>, group <strong>the anagrams</strong> together. You can return the answer in <strong>any order</strong>.
-  </p>
+    problemStatement: `
+<p class='mt-3'>
+Given an array of strings <code>strs</code>, group <strong>the anagrams</strong> together. You can return the answer in <strong>any order</strong>.
+</p>
 <p class='mt-3'>
 An <strong>Anagram</strong> is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
 </p>`,

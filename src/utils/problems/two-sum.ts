@@ -2,19 +2,19 @@ import { Problem } from "../types/problem";
 
 const starterCodeTwoSum = `class Solution:
 def twoSum(self, nums: List[int], target: int) -> List[int]:
-
 `;
 
 export const twoSum: Problem = {
 	id: "two-sum",
 	title: "1. Two Sum",
-	problemStatement: `<p class='mt-3'>
-  Given an array of integers <code>nums</code> and an integer <code>target</code>, return
-  <em>indices of the two numbers such that they add up to</em> <code>target</code>.
+	problemStatement: `
+<p class='mt-3'>
+Given an array of integers <code>nums</code> and an integer <code>target</code>, return
+<em>indices of the two numbers such that they add up to</em> <code>target</code>.
 </p>
 <p class='mt-3'>
-  You may assume that each input would have <strong>exactly one solution</strong>, and you
-  may not use the same element twice.
+You may assume that each input would have <strong>exactly one solution</strong>, and you
+may not use the same element twice.
 </p>
 <p class='mt-3'>You can return the answer in any order.</p>`,
 	examples: [
@@ -37,7 +37,7 @@ export const twoSum: Problem = {
 		},
 	],
 	constraints: `<li class='mt-2'>
-  <code>2 ≤ nums.length ≤ 10</code>
+<code>2 ≤ nums.length ≤ 10</code>
 </li> <li class='mt-2'>
 <code>-10 ≤ nums[i] ≤ 10</code>
 </li> <li class='mt-2'>

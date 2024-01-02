@@ -7,7 +7,7 @@ const neetcode75 = [
     "longest-substring-without-repeating-characters", "longest-repeating-character-replacement",
     "minimum-window-substring", "valid-parentheses", "find-minimum-in-rotated-sorted-array",
     "search-in-rotated-sorted-array", "reverse-linked-list", "merge-two-sorted-lists", "reorder-list",
-    
+    "remove-nth-node-from-end-of-list", "linked-list-cycle", "merge-k-sorted-lists"
 ]
 
 export const problemSets: ProblemSet[] = [

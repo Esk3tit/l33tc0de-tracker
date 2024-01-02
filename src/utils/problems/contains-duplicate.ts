@@ -2,17 +2,17 @@ import { Problem } from "../types/problem";
 
 const starterCodeContainsDuplicate = `class Solution:
 def containsDuplicate(self, nums: List[int]) -> bool:
-
 `;
 
 export const containsDuplicate: Problem = {
     id: "contains-duplicate",
     title: "217. Contains Duplicate",
-    problemStatement: `<p class='mt-3'>
-    Given an integer array <code>nums</code>, return
-    <code>true</code> if any value appears <strong>at least twice</strong> in the array,
-    and return <code>false</code> if every element is distinct.
-  </p>`,
+    problemStatement: `
+<p class='mt-3'>
+Given an integer array <code>nums</code>, return
+<code>true</code> if any value appears <strong>at least twice</strong> in the array,
+and return <code>false</code> if every element is distinct.
+</p>`,
     examples: [
         {
             id: 1,
