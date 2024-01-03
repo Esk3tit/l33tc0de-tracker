@@ -7,7 +7,9 @@ const neetcode75 = [
     "longest-substring-without-repeating-characters", "longest-repeating-character-replacement",
     "minimum-window-substring", "valid-parentheses", "find-minimum-in-rotated-sorted-array",
     "search-in-rotated-sorted-array", "reverse-linked-list", "merge-two-sorted-lists", "reorder-list",
-    "remove-nth-node-from-end-of-list", "linked-list-cycle", "merge-k-sorted-lists"
+    "remove-nth-node-from-end-of-list", "linked-list-cycle", "merge-k-sorted-lists", "invert-binary-tree",
+    "maximum-depth-of-binary-tree", "same-tree", "subtree-of-another-tree", "lowest-common-ancestor-of-a-binary-search-tree",
+    "binary-tree-level-order-traversal", "validate-binary-search-tree", "kth-smallest-element-in-a-bst"
 ]
 
 export const problemSets: ProblemSet[] = [

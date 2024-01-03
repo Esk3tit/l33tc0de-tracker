@@ -23,6 +23,14 @@ import { reorderList } from "./reorder-list";
 import { removeNthNodeFromEndOfList } from "./remove-nth-node-from-end-of-list";
 import { linkedListCycle } from "./linked-list-cycle";
 import { mergeKSortedLists } from "./merge-k-sorted-lists";
+import { invertBinaryTree } from "./invert-binary-tree";
+import { maximumDepthOfBinaryTree } from "./maximum-depth-of-binary-tree";
+import { sameTree } from "./same-tree";
+import { subtreeOfAnotherTree } from "./subtree-of-another-tree";
+import { lowestCommonAncestorOfABinarySearchTree } from "./lowest-common-ancestor-of-a-binary-search-tree";
+import { binaryTreeLevelOrderTraversal } from "./binary-tree-level-order-traversal";
+import { validateBinarySearchTree } from "./validate-binary-search-tree";
+import { kthSmallestElementInABST } from "./kth-smallest-element-in-a-bst";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -53,4 +61,12 @@ export const problems: ProblemMap = {
     "remove-nth-node-from-end-of-list": removeNthNodeFromEndOfList,
     "linked-list-cycle": linkedListCycle,
     "merge-k-sorted-lists": mergeKSortedLists,
+    "invert-binary-tree": invertBinaryTree,
+    "maximum-depth-of-binary-tree": maximumDepthOfBinaryTree,
+    "same-tree": sameTree,
+    "subtree-of-another-tree": subtreeOfAnotherTree,
+    "lowest-common-ancestor-of-a-binary-search-tree": lowestCommonAncestorOfABinarySearchTree,
+    "binary-tree-level-order-traversal": binaryTreeLevelOrderTraversal,
+    "validate-binary-search-tree": validateBinarySearchTree,
+    "kth-smallest-element-in-a-bst": kthSmallestElementInABST,
 }
