@@ -9,7 +9,9 @@ const neetcode75 = [
     "search-in-rotated-sorted-array", "reverse-linked-list", "merge-two-sorted-lists", "reorder-list",
     "remove-nth-node-from-end-of-list", "linked-list-cycle", "merge-k-sorted-lists", "invert-binary-tree",
     "maximum-depth-of-binary-tree", "same-tree", "subtree-of-another-tree", "lowest-common-ancestor-of-a-binary-search-tree",
-    "binary-tree-level-order-traversal", "validate-binary-search-tree", "kth-smallest-element-in-a-bst"
+    "binary-tree-level-order-traversal", "validate-binary-search-tree", "kth-smallest-element-in-a-bst",
+    "construct-binary-tree-from-preorder-and-inorder-traversal", "binary-tree-maximum-path-sum",
+    "serialize-and-deserialize-binary-tree"
 ]
 
 export const problemSets: ProblemSet[] = [

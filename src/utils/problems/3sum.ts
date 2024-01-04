@@ -39,9 +39,9 @@ Notice that the solution set must not contain duplicate triplets.
         },
     ],
     constraints: `<li class='mt-2'>
-    <code>3 <= nums.length <= 3000</code>
+<code>3 <= nums.length <= 3000</code>
 </li> <li class='mt-2'>
-    <code>-10<sup>5</sup> <= nums[i] <= 10<sup>5</sup></code>
+<code>-10<sup>5</sup> <= nums[i] <= 10<sup>5</sup></code>
 </li>`,
     starterCode: starterCode3Sum,
     order: 15

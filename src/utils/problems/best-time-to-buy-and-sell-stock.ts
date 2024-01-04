@@ -33,9 +33,9 @@ Return <em>the maximum profit you can achieve from this transaction</em>. If you
         },
     ],
     constraints: `<li class='mt-2'>
-    <code>1 <= prices.length <= 10<sup>5</sup></code>
+<code>1 <= prices.length <= 10<sup>5</sup></code>
 </li> <li class='mt-2'>
-    <code>0 <= prices[i] <= 10<sup>4</sup></code>
+<code>0 <= prices[i] <= 10<sup>4</sup></code>
 </li>`,
     starterCode: starterCodeBestTimeToBuyAndSellStock,
     order: 121

@@ -31,6 +31,9 @@ import { lowestCommonAncestorOfABinarySearchTree } from "./lowest-common-ancesto
 import { binaryTreeLevelOrderTraversal } from "./binary-tree-level-order-traversal";
 import { validateBinarySearchTree } from "./validate-binary-search-tree";
 import { kthSmallestElementInABST } from "./kth-smallest-element-in-a-bst";
+import { constructBinaryTreeFromPreorderAndInorderTraversal } from "./construct-binary-tree-from-preorder-and-inorder-traversal";
+import { binaryTreeMaximumPathSum } from "./binary-tree-maximum-path-sum";
+import { serializeAndDeserializeBinaryTree } from "./serialize-and-deserialize-binary-tree";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -69,4 +72,7 @@ export const problems: ProblemMap = {
     "binary-tree-level-order-traversal": binaryTreeLevelOrderTraversal,
     "validate-binary-search-tree": validateBinarySearchTree,
     "kth-smallest-element-in-a-bst": kthSmallestElementInABST,
+    "construct-binary-tree-from-preorder-and-inorder-traversal": constructBinaryTreeFromPreorderAndInorderTraversal,
+    "binary-tree-maximum-path-sum": binaryTreeMaximumPathSum,
+    "serialize-and-deserialize-binary-tree": serializeAndDeserializeBinaryTree,
 }
