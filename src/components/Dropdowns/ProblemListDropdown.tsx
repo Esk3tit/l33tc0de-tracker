@@ -17,7 +17,7 @@ const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, fi
     const searchParams = useSearchParams();
     const problemSetId = searchParams.get("set");
     const selectedSet = problemSets.find(set => set.id === problemSetId);
-    const [isOpen, setIsOpen] = useState((withModal && problemSet.id === selectedSet?.id) || false);
+    const [isOpen, setIsOpen] = useState(withModal && problemSet.id === selectedSet?.id);
 
     const toggleDropdown = () => {
         if (!isOpen) {
