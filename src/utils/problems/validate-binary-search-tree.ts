@@ -14,7 +14,7 @@ Given the <code>root</code> of a binary tree, <em>determine if it is a valid bin
 <p class='mt-3'>
 A <strong>valid BST</strong> is defined as follows:
 </p>
-<ul class='mt-3 list-disc'>
+<ul class='mt-3 problem-list'>
 <li class='mt-2'>
 The left subtree of a node contains only nodes with keys <strong>less than</strong> the node's key.
 </li> <li class='mt-2'>

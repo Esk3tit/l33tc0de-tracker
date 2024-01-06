@@ -1,12 +1,12 @@
 'use client'
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, createRef, MutableRefObject } from 'react';
 import { BsCheckCircle } from 'react-icons/bs';
 import { AiFillYoutube } from 'react-icons/ai';
 import Link from 'next/link';
 import { IoClose } from 'react-icons/io5';
 import YouTube from 'react-youtube';
-import { DBProblem } from '@/utils/types/problem';
+import { DBProblem, ProblemSet } from '@/utils/types/problem';
 import useCloseModal from '@/hooks/useCloseModal';
 import { usePathname } from 'next/navigation';
 
@@ -15,17 +15,34 @@ type ProblemsTableProps = {
     solvedProblems: Set<string>;
     problemSetId: string;
     withModal?: boolean;
+    selectedSet: ProblemSet | undefined;
 };
 
-const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems, problemSetId, withModal }) => {
+const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems, problemSetId, selectedSet, withModal }) => {
+
+    const pathname = usePathname();
+    const pid = pathname.split("/")[2];
+
+    const [problemRefs, setProblemRefs] = useState<{[key: string]: MutableRefObject<any>}>({});
+
+    useEffect(() => {
+        setProblemRefs(problems.reduce((acc: {[key: string]: MutableRefObject<any>}, problem) => {
+            acc[`${problemSetId}-${problem.id}`] = createRef();
+            return acc;
+        }, {}));
+    }, [problems]);
+
+    useEffect(() => {
+        if (withModal && problemSetId === selectedSet?.id && problemRefs[`${problemSetId}-${pid}`]) {
+            problemRefs[`${problemSetId}-${pid}`].current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }, [pid, selectedSet, problemRefs]);
 
     const [youtubePlayer, setYoutubePlayer] = useState({
         isOpen: false,
         videoId: '',
     });
-    const pathname = usePathname();
-    const pid = pathname.split("/")[2];
-
+    
     const closeModal = () => {
         setYoutubePlayer({ isOpen: false, videoId: '' });
     };
@@ -48,7 +65,7 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems,
                 {problems.map((problem, idx) => {
                     const difficultyColor = problem.difficulty === 'Easy' ? 'text-dark-green-s' : problem.difficulty === 'Medium' ? 'text-dark-yellow' : 'text-dark-pink';
                     return (
-                        <tr key={problem.id} className={`${(withModal && problem.id === pid) ? 'bg-gray-500' : idx % 2 === 1 ? 'bg-dark-layer-1' : ''}`}>
+                        <tr ref={problemRefs[`${problemSetId}-${problem.id}`]} key={problem.id} className={`${(withModal && problem.id === pid) ? 'bg-gray-500' : idx % 2 === 1 ? 'bg-dark-layer-1' : ''}`}>
                             <th className='px-2 py-4 font-medium whitespace-nowrap text-dark-green-s'>
                                 {solvedProblems.has(problem.id) && <BsCheckCircle fontSize={18} width={18} />}
                             </th>

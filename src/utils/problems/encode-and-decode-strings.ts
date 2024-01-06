@@ -56,7 +56,7 @@ Implement the <code>encode</code> and <code>decode</code> methods.
 <p class='mt-3'>
 <strong>Note:</strong>
 </p>
-<ul class='mt-3'>
+<ul class='mt-3 problem-list'>
 <li class='mt-2'>
 The string may contain any possible characters out of 256 valid ascii characters. Your algorithm should be generalized enough to work on any possible characters.
 </li>

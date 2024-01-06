@@ -34,6 +34,9 @@ import { kthSmallestElementInABST } from "./kth-smallest-element-in-a-bst";
 import { constructBinaryTreeFromPreorderAndInorderTraversal } from "./construct-binary-tree-from-preorder-and-inorder-traversal";
 import { binaryTreeMaximumPathSum } from "./binary-tree-maximum-path-sum";
 import { serializeAndDeserializeBinaryTree } from "./serialize-and-deserialize-binary-tree";
+import { implementTriePrefixTree } from "./implement-trie-prefix-tree";
+import { designAddAndSearchWordsDataStructure } from "./design-add-and-search-words-data-structure";
+import { wordSearchII } from "./word-search-ii";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -75,4 +78,7 @@ export const problems: ProblemMap = {
     "construct-binary-tree-from-preorder-and-inorder-traversal": constructBinaryTreeFromPreorderAndInorderTraversal,
     "binary-tree-maximum-path-sum": binaryTreeMaximumPathSum,
     "serialize-and-deserialize-binary-tree": serializeAndDeserializeBinaryTree,
+    "implement-trie-prefix-tree": implementTriePrefixTree,
+    "design-add-and-search-words-data-structure": designAddAndSearchWordsDataStructure,
+    "word-search-ii": wordSearchII,
 }

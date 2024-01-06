@@ -11,7 +11,8 @@ const neetcode75 = [
     "maximum-depth-of-binary-tree", "same-tree", "subtree-of-another-tree", "lowest-common-ancestor-of-a-binary-search-tree",
     "binary-tree-level-order-traversal", "validate-binary-search-tree", "kth-smallest-element-in-a-bst",
     "construct-binary-tree-from-preorder-and-inorder-traversal", "binary-tree-maximum-path-sum",
-    "serialize-and-deserialize-binary-tree"
+    "serialize-and-deserialize-binary-tree", "implement-trie-prefix-tree", "design-add-and-search-words-data-structure",
+    "word-search-ii",
 ]
 
 export const problemSets: ProblemSet[] = [

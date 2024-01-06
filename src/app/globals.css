@@ -130,3 +130,11 @@ code {
 .no-lh {
 	line-height: 0px;
 }
+
+.problem-list {
+	list-style-type: disc;
+}
+
+.problem-list > li {
+	margin: 1rem;
+}
