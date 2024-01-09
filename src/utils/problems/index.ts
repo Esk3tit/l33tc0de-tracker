@@ -37,6 +37,9 @@ import { serializeAndDeserializeBinaryTree } from "./serialize-and-deserialize-b
 import { implementTriePrefixTree } from "./implement-trie-prefix-tree";
 import { designAddAndSearchWordsDataStructure } from "./design-add-and-search-words-data-structure";
 import { wordSearchII } from "./word-search-ii";
+import { findMedianFromDataStream } from "./find-median-from-data-stream";
+import { combinationSum } from "./combination-sum";
+import { wordSearch } from "./word-search";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -81,4 +84,7 @@ export const problems: ProblemMap = {
     "implement-trie-prefix-tree": implementTriePrefixTree,
     "design-add-and-search-words-data-structure": designAddAndSearchWordsDataStructure,
     "word-search-ii": wordSearchII,
+    "find-median-from-data-stream": findMedianFromDataStream,
+    "combination-sum": combinationSum,
+    "word-search": wordSearch,
 }

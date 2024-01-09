@@ -3,13 +3,17 @@ import useGetProblems from '@/hooks/useGetProblems';
 import useGetSolvedProblems from '@/hooks/useGetSolvedProblems';
 import React, { useState } from 'react';
 import ProblemListDropdown from '../Dropdowns/ProblemListDropdown';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 type ProblemSetAccordionListProps = {
     withModal?: boolean;
 };
 
 const ProblemSetAccordionList:React.FC<ProblemSetAccordionListProps> = ({ withModal }) => {
-    
+    const pathname = usePathname();
+    const pid = pathname.split("/")[2];
+    const searchParams = useSearchParams();
+    const problemSetId = searchParams.get("set");
     const [loadingProblems, setLoadingProblems] = useState(true);
     const [loadingSolved, setLoadingSolved] = useState(true);
     const allProblems = useGetProblems(setLoadingProblems);
@@ -42,6 +46,8 @@ const ProblemSetAccordionList:React.FC<ProblemSetAccordionListProps> = ({ withMo
                             filterProblemsForProblemSet={filterProblemsForProblemSet}
                             filterSolvedProblemsForProblemSet={filterSolvedProblemsForProblemSet}
                             withModal
+                            pid={pid}
+                            problemSetId={problemSetId}
                         />
                     ))}
                 </div>
@@ -50,18 +56,6 @@ const ProblemSetAccordionList:React.FC<ProblemSetAccordionListProps> = ({ withMo
     )
 }
 export default ProblemSetAccordionList;
-
-// const LoadingSkeleton = () => {
-// 	return (
-// 		<div className='flex items-center space-x-12 mt-4 px-6'>
-// 			<div className='w-6 h-6 shrink-0 rounded-full bg-dark-layer-1'></div>
-// 			<div className='h-4 sm:w-52 w-32 rounded-full bg-dark-layer-1'></div>
-// 			<div className='h-4 sm:w-52 w-32 rounded-full bg-dark-layer-1'></div>
-// 			<div className='h-4 sm:w-52 w-32 rounded-full bg-dark-layer-1'></div>
-// 			<span className='sr-only'>Loading...</span>
-// 		</div>
-// 	);
-// };
 
 const LoadingSkeleton = () => {
 	return (

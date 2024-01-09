@@ -19,7 +19,7 @@ def startsWith(self, prefix: str) -> bool:
 # obj = Trie()
 # obj.insert(word)
 # param_2 = obj.search(word)
-# param_3 = obj.startsWith(prefix);`
+# param_3 = obj.startsWith(prefix)`
 
 export const implementTriePrefixTree: Problem = {
     id: "implement-trie-prefix-tree",
@@ -32,7 +32,7 @@ A <a href='https://en.wikipedia.org/wiki/Trie' target='_blank'>trie</a> (pronoun
 Implement the Trie class:
 </p>
 <ul class='mt-3 problem-list'>
-<li class='m-1'><code>Trie()</code> Initializes the trie object.</li>
+<li><code>Trie()</code> Initializes the trie object.</li>
 <li><code>void insert(String word)</code> Inserts the string <code>word</code> into the trie.</li>
 <li><code>boolean search(String word)</code> Returns <code>true</code> if the string <code>word</code> is in the trie (i.e., was inserted before), and <code>false</code> otherwise.</li>
 <li><code>boolean startsWith(String prefix)</code> Returns <code>true</code> if there is a previously inserted string <code>word</code> that has the prefix <code>prefix</code>, and <code>false</code> otherwise.</li>

@@ -8,7 +8,6 @@ import { IoClose } from 'react-icons/io5';
 import YouTube from 'react-youtube';
 import { DBProblem, ProblemSet } from '@/utils/types/problem';
 import useCloseModal from '@/hooks/useCloseModal';
-import { usePathname } from 'next/navigation';
 
 type ProblemsTableProps = {
     problems: DBProblem[];
@@ -16,13 +15,10 @@ type ProblemsTableProps = {
     problemSetId: string;
     withModal?: boolean;
     selectedSet: ProblemSet | undefined;
+    pid: string | undefined;
 };
 
-const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems, problemSetId, selectedSet, withModal }) => {
-
-    const pathname = usePathname();
-    const pid = pathname.split("/")[2];
-
+const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems, problemSetId, selectedSet, withModal, pid }) => {
     const [problemRefs, setProblemRefs] = useState<{[key: string]: MutableRefObject<any>}>({});
 
     useEffect(() => {
@@ -33,7 +29,7 @@ const ProblemsTable: React.FC<ProblemsTableProps> = ({ problems, solvedProblems,
     }, [problems]);
 
     useEffect(() => {
-        if (withModal && problemSetId === selectedSet?.id && problemRefs[`${problemSetId}-${pid}`]) {
+        if (withModal && pid && problemSetId === selectedSet?.id && problemRefs[`${problemSetId}-${pid}`]) {
             problemRefs[`${problemSetId}-${pid}`].current.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     }, [pid, selectedSet, problemRefs]);

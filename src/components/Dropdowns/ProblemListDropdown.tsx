@@ -2,20 +2,19 @@ import React, { useState } from 'react';
 import ProblemsTable from '../ProblemsTable/ProblemsTable';
 import { DBProblem, ProblemSet } from '@/utils/types/problem';
 import { problemSets } from '@/data/problemSets';
-import { useSearchParams } from 'next/navigation';
 
 type ProblemListDropdownProps = {
     problemSet: ProblemSet;
     filterProblemsForProblemSet: (setId: string) => DBProblem[];
     filterSolvedProblemsForProblemSet: (setId: string) => string[];
     withModal?: boolean;
+    pid: string | undefined;
+    problemSetId: string | null;
 };
 
-const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, filterProblemsForProblemSet, filterSolvedProblemsForProblemSet, withModal }) => {
+const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, filterProblemsForProblemSet, filterSolvedProblemsForProblemSet, withModal, pid, problemSetId }) => {
     const [problems, setProblems] = useState<DBProblem[]>(filterProblemsForProblemSet(problemSet.id));
     const [solvedProblems, setSolvedProblems] = useState<Set<string>>(new Set(filterSolvedProblemsForProblemSet(problemSet.id)));
-    const searchParams = useSearchParams();
-    const problemSetId = searchParams.get("set");
     const selectedSet = problemSets.find(set => set.id === problemSetId);
     const [isOpen, setIsOpen] = useState(withModal && problemSet.id === selectedSet?.id);
 
@@ -58,7 +57,14 @@ const ProblemListDropdown:React.FC<ProblemListDropdownProps> = ({ problemSet, fi
                                     </th>
                                 </tr>
                             </thead>
-                            <ProblemsTable problemSetId={problemSet.id} problems={problems} solvedProblems={solvedProblems} selectedSet={selectedSet} withModal />
+                            <ProblemsTable
+                                problemSetId={problemSet.id}
+                                problems={problems}
+                                solvedProblems={solvedProblems}
+                                selectedSet={selectedSet}
+                                withModal
+                                pid={pid}
+                            />
                         </table>
                     </div>
                 </div>
