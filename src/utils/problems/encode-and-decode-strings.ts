@@ -73,7 +73,15 @@ Do not rely on any library method such as <code>eval</code> or serialize methods
             id: 1,
             inputText: 'dummy_input = ["Hello", "World"]',
             outputText: '["Hello", "World"]',
-            explanation: 'Machine 1: Codec encoder = new Codec(); String msg = encoder.encode(strs); Machine 1 ---msg---> Machine 2 Machine 2: Codec decoder = new Codec(); vector<string> strs2 = decoder.decode(msg); strs2 in Machine 2 should be the same as strs in Machine 1.'
+            explanation: `
+Machine 1:
+Codec encoder = new Codec();
+String msg = encoder.encode(strs);
+Machine 1 ---msg---> Machine 2
+
+Machine 2:
+Codec decoder = new Codec();
+String[] strs = decoder.decode(msg);`
         },
         {
             id: 2,

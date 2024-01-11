@@ -32,7 +32,7 @@ Given two strings <code>s</code> and <code>t</code> of lengths <code>m</code> an
             inputText: 's = "a", t = "aa"',
             outputText: '""',
             explanation: `Both 'a's from t must be included in the window.
-<p class='no-lh mt-2'>Since the largest window of s only has one 'a', return empty string.</p>`
+Since the largest window of s only has one 'a', return empty string.`
         },
     ],
     constraints: `<li class='mt-2'>

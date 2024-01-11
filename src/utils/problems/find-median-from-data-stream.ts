@@ -42,13 +42,16 @@ Implement the MedianFinder class:
             inputText: `
 ["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
 [[], [1], [2], [], [3], []]`,
-            outputText: '[null, null, null, 1.5, null, 2.0]',
-            explanation: `<p class='no-lh mt-3'>MedianFinder medianFinder = new MedianFinder();</p>
-<p class='no-lh'>medianFinder.addNum(1);    // arr = [1]</p>
-<p class='no-lh'>medianFinder.addNum(2);    // arr = [1, 2]</p>
-<p class='no-lh'>medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)</p>
-<p class='no-lh'>medianFinder.addNum(3);    // arr[1, 2, 3]</p>
-<p class='no-lh'>medianFinder.findMedian(); // return 2.0</p>`
+            outputText: `
+[null, null, null, 1.5, null, 2.0]
+`,
+            explanation: `
+MedianFinder medianFinder = new MedianFinder();
+medianFinder.addNum(1);    // arr = [1]
+medianFinder.addNum(2);    // arr = [1, 2]
+medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
+medianFinder.addNum(3);    // arr[1, 2, 3]
+medianFinder.findMedian(); // return 2.0`
         },
     ],
     constraints: `<li class='mt-2'>

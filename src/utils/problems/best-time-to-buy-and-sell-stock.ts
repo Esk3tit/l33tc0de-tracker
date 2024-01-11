@@ -23,7 +23,7 @@ Return <em>the maximum profit you can achieve from this transaction</em>. If you
             inputText: 'prices = [7,1,5,3,6,4]',
             outputText: '5',
             explanation: `Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
-<p class='no-lh mt-2'>Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.</p>`
+Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.`
         },
         {
             id: 2,

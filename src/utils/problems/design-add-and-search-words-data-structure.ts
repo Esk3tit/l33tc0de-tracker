@@ -38,15 +38,18 @@ Implement the <code>WordDictionary</code> class:
             inputText: `
 ["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
 [[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]`,
-            outputText: '[null,null,null,null,false,true,true,true]',
-            explanation: `<p class='no-lh mt-3'>WordDictionary wordDictionary = new WordDictionary();</p>
-<p class='no-lh'>wordDictionary.addWord("bad");</p>
-<p class='no-lh'>wordDictionary.addWord("dad");</p>
-<p class='no-lh'>wordDictionary.addWord("mad");</p>
-<p class='no-lh'>wordDictionary.search("pad"); // return False</p>
-<p class='no-lh'>wordDictionary.search("bad"); // return True</p>
-<p class='no-lh'>wordDictionary.search(".ad"); // return True</p>
-<p class='no-lh'>wordDictionary.search("b.."); // return True</p>`
+            outputText: `
+[null,null,null,null,false,true,true,true]
+`,
+            explanation: `
+WordDictionary wordDictionary = new WordDictionary();
+wordDictionary.addWord("bad");
+wordDictionary.addWord("dad");
+wordDictionary.addWord("mad");
+wordDictionary.search("pad"); // return False
+wordDictionary.search("bad"); // return True
+wordDictionary.search(".ad"); // return True
+wordDictionary.search("b.."); // return True`
         },
     ],
     constraints: `<li class='mt-2'>

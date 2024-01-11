@@ -12,7 +12,8 @@ const neetcode75 = [
     "binary-tree-level-order-traversal", "validate-binary-search-tree", "kth-smallest-element-in-a-bst",
     "construct-binary-tree-from-preorder-and-inorder-traversal", "binary-tree-maximum-path-sum",
     "serialize-and-deserialize-binary-tree", "implement-trie-prefix-tree", "design-add-and-search-words-data-structure",
-    "word-search-ii", "find-median-from-data-stream", "combination-sum", "word-search",
+    "word-search-ii", "find-median-from-data-stream", "combination-sum", "word-search", "number-of-islands",
+    "clone-graph",
 ]
 
 export const problemSets: ProblemSet[] = [

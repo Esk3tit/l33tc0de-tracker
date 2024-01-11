@@ -20,13 +20,13 @@ You are given an array of <code>k</code> linked-lists <code>lists</code>, each l
             inputText: 'lists = [[1,4,5],[1,3,4],[2,6]]',
             outputText: '[1,1,2,3,4,4,5,6]',
             explanation: `The linked-lists are:
-<p class='no-lh mt-2'>[</p>
-<p class='no-lh'>  1->4->5,</p>
-<p class='no-lh'>  1->3->4,</p>
-<p class='no-lh'>  2->6</p>
-<p class='no-lh'>]</p>
-<p class='no-lh mt-2'>merging them into one sorted list:</p>
-<p class='no-lh'>1->1->2->3->4->4->5->6</p>`
+[
+  1->4->5,
+  1->3->4,
+  2->6
+]
+merging them into one sorted list:
+1->1->2->3->4->4->5->6`
         },
         {
             id: 2,

@@ -43,14 +43,17 @@ Implement the Trie class:
             inputText: `
 ["Trie", "insert", "search", "search", "startsWith", "insert", "search"]
 [[], ["apple"], ["apple"], ["app"], ["app"], ["app"], ["app"]]`,
-            outputText: '[null, null, true, false, true, null, true]',
-            explanation: `<p class='no-lh mt-3'>Trie trie = new Trie();</p>
-<p class='no-lh'>trie.insert("apple");</p>
-<p class='no-lh'>trie.search("apple");   // return True</p>
-<p class='no-lh'>trie.search("app");     // return False</p>
-<p class='no-lh'>trie.startsWith("app"); // return True</p>
-<p class='no-lh'>trie.insert("app");</p>
-<p class='no-lh'>trie.search("app");     // return True</p>`
+            outputText: `
+[null, null, true, false, true, null, true]
+`,
+            explanation: `
+Trie trie = new Trie();
+trie.insert("apple");
+trie.search("apple");   // return True
+trie.search("app");     // return False
+trie.startsWith("app"); // return True
+trie.insert("app");
+trie.search("app");     // return True`
         },
     ],
     constraints: `<li class='mt-2'>

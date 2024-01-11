@@ -40,6 +40,8 @@ import { wordSearchII } from "./word-search-ii";
 import { findMedianFromDataStream } from "./find-median-from-data-stream";
 import { combinationSum } from "./combination-sum";
 import { wordSearch } from "./word-search";
+import { numberOfIslands } from "./number-of-islands";
+import { cloneGraph } from "./clone-graph";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -87,4 +89,6 @@ export const problems: ProblemMap = {
     "find-median-from-data-stream": findMedianFromDataStream,
     "combination-sum": combinationSum,
     "word-search": wordSearch,
+    "number-of-islands": numberOfIslands,
+    "clone-graph": cloneGraph,
 }

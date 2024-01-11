@@ -22,9 +22,10 @@ The test cases are generated such that the number of unique combinations that su
             id: 1,
             inputText: 'candidates = [2,3,6,7], target = 7',
             outputText: '[[2,2,3],[7]]',
-            explanation: `<p class='no-lh mt-3'>2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.</p>
-<p class='no-lh'>7 is a candidate, and 7 = 7.</p>
-<p class='no-lh'>These are the only two combinations.</p>`
+            explanation: `
+2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
+7 is a candidate, and 7 = 7.
+These are the only two combinations.`
         },
         {
             id: 2,

@@ -19,11 +19,12 @@ Notice that the solution set must not contain duplicate triplets.
             id: 1,
             inputText: 'nums = [-1,0,1,2,-1,-4]',
             outputText: '[[-1,-1,2],[-1,0,1]]',
-            explanation: `<p class='no-lh mt-3'>nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.</p>
-<p class='no-lh'>nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.</p>
-<p class='no-lh'>nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.</p>
-<p class='no-lh'>The distinct triplets are [-1,0,1] and [-1,-1,2].</p>
-<p class='no-lh'>Notice that the order of the output and the order of the triplets does not matter.</p>`
+            explanation: `
+nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
+nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+The distinct triplets are [-1,0,1] and [-1,-1,2].
+Notice that the order of the output and the order of the triplets does not matter.`
         },
         {
             id: 2,
