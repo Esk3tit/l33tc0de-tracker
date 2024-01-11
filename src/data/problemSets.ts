@@ -13,7 +13,8 @@ const neetcode75 = [
     "construct-binary-tree-from-preorder-and-inorder-traversal", "binary-tree-maximum-path-sum",
     "serialize-and-deserialize-binary-tree", "implement-trie-prefix-tree", "design-add-and-search-words-data-structure",
     "word-search-ii", "find-median-from-data-stream", "combination-sum", "word-search", "number-of-islands",
-    "clone-graph",
+    "clone-graph", "pacific-atlantic-water-flow", "course-schedule", "number-of-connected-components-in-an-undirected-graph",
+    "graph-valid-tree", 
 ]
 
 export const problemSets: ProblemSet[] = [

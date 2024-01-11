@@ -42,6 +42,10 @@ import { combinationSum } from "./combination-sum";
 import { wordSearch } from "./word-search";
 import { numberOfIslands } from "./number-of-islands";
 import { cloneGraph } from "./clone-graph";
+import { pacificAtlanticWaterFlow } from "./pacific-atlantic-water-flow";
+import { courseSchedule } from "./course-schedule";
+import { numberOfConnectedComponentsInAnUndirectedGraph } from "./number-of-connected-components-in-an-undirected-graph";
+import { graphValidTree } from "./graph-valid-tree";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -91,4 +95,8 @@ export const problems: ProblemMap = {
     "word-search": wordSearch,
     "number-of-islands": numberOfIslands,
     "clone-graph": cloneGraph,
+    "pacific-atlantic-water-flow": pacificAtlanticWaterFlow,
+    "course-schedule": courseSchedule,
+    "number-of-connected-components-in-an-undirected-graph": numberOfConnectedComponentsInAnUndirectedGraph,
+    "graph-valid-tree": graphValidTree,
 }
