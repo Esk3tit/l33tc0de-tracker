@@ -46,6 +46,12 @@ import { pacificAtlanticWaterFlow } from "./pacific-atlantic-water-flow";
 import { courseSchedule } from "./course-schedule";
 import { numberOfConnectedComponentsInAnUndirectedGraph } from "./number-of-connected-components-in-an-undirected-graph";
 import { graphValidTree } from "./graph-valid-tree";
+import { alienDictionary } from "./alien-dictionary";
+import { climbingStairs } from "./climbing-stairs";
+import { houseRobber } from "./house-robber";
+import { houseRobberII } from "./house-robber-ii";
+import { longestPalindromicSubstring } from "./longest-palindromic-substring";
+import { palindromicSubstrings } from "./palindromic-substrings";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -99,4 +105,10 @@ export const problems: ProblemMap = {
     "course-schedule": courseSchedule,
     "number-of-connected-components-in-an-undirected-graph": numberOfConnectedComponentsInAnUndirectedGraph,
     "graph-valid-tree": graphValidTree,
+    "alien-dictionary": alienDictionary,
+    "climbing-stairs": climbingStairs,
+    "house-robber": houseRobber,
+    "house-robber-ii": houseRobberII,
+    "longest-palindromic-substring": longestPalindromicSubstring,
+    "palindromic-substrings": palindromicSubstrings,
 }
