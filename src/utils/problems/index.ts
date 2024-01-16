@@ -52,6 +52,12 @@ import { houseRobber } from "./house-robber";
 import { houseRobberII } from "./house-robber-ii";
 import { longestPalindromicSubstring } from "./longest-palindromic-substring";
 import { palindromicSubstrings } from "./palindromic-substrings";
+import { decodeWays } from "./decode-ways";
+import { coinChange } from "./coin-change";
+import { maximumProductSubarray } from "./maximum-product-subarray";
+import { wordBreak } from "./word-break";
+import { longestIncreasingSubsequence } from "./longest-increasing-subsequence";
+import { uniquePaths } from "./unique-paths";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -111,4 +117,10 @@ export const problems: ProblemMap = {
     "house-robber-ii": houseRobberII,
     "longest-palindromic-substring": longestPalindromicSubstring,
     "palindromic-substrings": palindromicSubstrings,
+    "decode-ways": decodeWays,
+    "coin-change": coinChange,
+    "maximum-product-subarray": maximumProductSubarray,
+    "word-break": wordBreak,
+    "longest-increasing-subsequence": longestIncreasingSubsequence,
+    "unique-paths": uniquePaths,
 }

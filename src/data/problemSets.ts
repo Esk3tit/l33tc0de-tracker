@@ -15,7 +15,8 @@ const neetcode75 = [
     "word-search-ii", "find-median-from-data-stream", "combination-sum", "word-search", "number-of-islands",
     "clone-graph", "pacific-atlantic-water-flow", "course-schedule", "number-of-connected-components-in-an-undirected-graph",
     "graph-valid-tree", "alien-dictionary", "climbing-stairs", "house-robber", "house-robber-ii",
-    "longest-palindromic-substring", "palindromic-substrings",
+    "longest-palindromic-substring", "palindromic-substrings", "decode-ways", "coin-change",
+    "maximum-product-subarray", "word-break", "longest-increasing-subsequence", "unique-paths",
 ]
 
 export const problemSets: ProblemSet[] = [
