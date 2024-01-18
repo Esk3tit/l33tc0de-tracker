@@ -58,6 +58,12 @@ import { maximumProductSubarray } from "./maximum-product-subarray";
 import { wordBreak } from "./word-break";
 import { longestIncreasingSubsequence } from "./longest-increasing-subsequence";
 import { uniquePaths } from "./unique-paths";
+import { longestCommonSubsequence } from "./longest-common-subsequence";
+import { maximumSubarray } from "./maximum-subarray";
+import { jumpGame } from "./jump-game";
+import { insertInterval } from "./insert-interval";
+import { mergeIntervals } from "./merge-intervals";
+import { nonOverlappingIntervals } from "./non-overlapping-intervals";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -123,4 +129,10 @@ export const problems: ProblemMap = {
     "word-break": wordBreak,
     "longest-increasing-subsequence": longestIncreasingSubsequence,
     "unique-paths": uniquePaths,
+    "longest-common-subsequence": longestCommonSubsequence,
+    "maximum-subarray": maximumSubarray,
+    "jump-game": jumpGame,
+    "insert-interval": insertInterval,
+    "merge-intervals": mergeIntervals,
+    "non-overlapping-intervals": nonOverlappingIntervals,
 }

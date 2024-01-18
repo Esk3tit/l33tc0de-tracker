@@ -17,6 +17,8 @@ const neetcode75 = [
     "graph-valid-tree", "alien-dictionary", "climbing-stairs", "house-robber", "house-robber-ii",
     "longest-palindromic-substring", "palindromic-substrings", "decode-ways", "coin-change",
     "maximum-product-subarray", "word-break", "longest-increasing-subsequence", "unique-paths",
+    "longest-common-subsequence", "maximum-subarray", "jump-game", "insert-interval", "merge-intervals",
+    "non-overlapping-intervals",
 ]
 
 export const problemSets: ProblemSet[] = [
