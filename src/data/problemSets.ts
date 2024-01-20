@@ -18,7 +18,7 @@ const neetcode75 = [
     "longest-palindromic-substring", "palindromic-substrings", "decode-ways", "coin-change",
     "maximum-product-subarray", "word-break", "longest-increasing-subsequence", "unique-paths",
     "longest-common-subsequence", "maximum-subarray", "jump-game", "insert-interval", "merge-intervals",
-    "non-overlapping-intervals",
+    "non-overlapping-intervals", "meeting-rooms", "meeting-rooms-ii", "rotate-image", "spiral-matrix",
 ]
 
 export const problemSets: ProblemSet[] = [

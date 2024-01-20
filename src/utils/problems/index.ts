@@ -64,6 +64,9 @@ import { jumpGame } from "./jump-game";
 import { insertInterval } from "./insert-interval";
 import { mergeIntervals } from "./merge-intervals";
 import { nonOverlappingIntervals } from "./non-overlapping-intervals";
+import { meetingRooms } from "./meeting-rooms";
+import { meetingRoomsII } from "./meeting-rooms-ii";
+import { rotateImage } from "./rotate-image";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -135,4 +138,7 @@ export const problems: ProblemMap = {
     "insert-interval": insertInterval,
     "merge-intervals": mergeIntervals,
     "non-overlapping-intervals": nonOverlappingIntervals,
+    "meeting-rooms": meetingRooms,
+    "meeting-rooms-ii": meetingRoomsII,
+    "rotate-image": rotateImage,
 }

@@ -1,7 +1,7 @@
 import { Problem } from "../types/problem";
 
 const starterCodeGraphValidTree = `class Solution:
-def validTree(self, n: int, edges: List[List[int]]) -> bool:
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
 `;
 
 export const graphValidTree: Problem = {

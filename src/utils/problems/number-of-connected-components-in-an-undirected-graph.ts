@@ -1,7 +1,7 @@
 import { Problem } from "../types/problem";
 
 const starterCodeNumberOfConnectedComponentsInAnUndirectedGraph = `class Solution:
-def countComponents(self, n: int, edges: List[List[int]]) -> int:
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
 `;
 
 export const numberOfConnectedComponentsInAnUndirectedGraph: Problem = {
