@@ -19,6 +19,7 @@ const neetcode75 = [
     "maximum-product-subarray", "word-break", "longest-increasing-subsequence", "unique-paths",
     "longest-common-subsequence", "maximum-subarray", "jump-game", "insert-interval", "merge-intervals",
     "non-overlapping-intervals", "meeting-rooms", "meeting-rooms-ii", "rotate-image", "spiral-matrix",
+    "set-matrix-zeroes", "number-of-1-bits", "counting-bits", "reverse-bits", "missing-number",
 ]
 
 export const problemSets: ProblemSet[] = [

@@ -67,6 +67,9 @@ import { nonOverlappingIntervals } from "./non-overlapping-intervals";
 import { meetingRooms } from "./meeting-rooms";
 import { meetingRoomsII } from "./meeting-rooms-ii";
 import { rotateImage } from "./rotate-image";
+import { spiralMatrix } from "./spiral-matrix";
+import { setMatrixZeroes } from "./set-matrix-zeroes";
+import { numberOf1Bits } from "./number-of-1-bits";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -141,4 +144,7 @@ export const problems: ProblemMap = {
     "meeting-rooms": meetingRooms,
     "meeting-rooms-ii": meetingRoomsII,
     "rotate-image": rotateImage,
+    "spiral-matrix": spiralMatrix,
+    "set-matrix-zeroes": setMatrixZeroes,
+    "number-of-1-bits": numberOf1Bits,
 }
