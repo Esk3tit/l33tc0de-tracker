@@ -70,6 +70,10 @@ import { rotateImage } from "./rotate-image";
 import { spiralMatrix } from "./spiral-matrix";
 import { setMatrixZeroes } from "./set-matrix-zeroes";
 import { numberOf1Bits } from "./number-of-1-bits";
+import { countingBits } from "./counting-bits";
+import { reverseBits } from "./reverse-bits";
+import { missingNumber } from "./missing-number";
+import { sumOfTwoIntegers } from "./sum-of-two-integers";
 
 interface ProblemMap {
     [key: string]: Problem
@@ -147,4 +151,8 @@ export const problems: ProblemMap = {
     "spiral-matrix": spiralMatrix,
     "set-matrix-zeroes": setMatrixZeroes,
     "number-of-1-bits": numberOf1Bits,
+    "counting-bits": countingBits,
+    "reverse-bits": reverseBits,
+    "missing-number": missingNumber,
+    "sum-of-two-integers": sumOfTwoIntegers,
 }

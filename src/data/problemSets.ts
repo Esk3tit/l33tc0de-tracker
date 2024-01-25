@@ -20,6 +20,7 @@ const neetcode75 = [
     "longest-common-subsequence", "maximum-subarray", "jump-game", "insert-interval", "merge-intervals",
     "non-overlapping-intervals", "meeting-rooms", "meeting-rooms-ii", "rotate-image", "spiral-matrix",
     "set-matrix-zeroes", "number-of-1-bits", "counting-bits", "reverse-bits", "missing-number",
+    "sum-of-two-integers",
 ]
 
 export const problemSets: ProblemSet[] = [
