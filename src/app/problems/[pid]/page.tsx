@@ -1,7 +1,7 @@
 'use client'
 
 import { sideNavProblemSetsState } from '@/atoms/sideNavProblemSets';
-import SideNavProblemSetsModal from '@/components/Modals/sideNavProblemSetsModal';
+import SideNavProblemSetsModal from '@/components/Modals/SideNavProblemSetsModal';
 import Topbar from '@/components/Topbar/Topbar';
 import Workspace from '@/components/Workspace/Workspace';
 import useHasMounted from '@/hooks/useHasMounted';

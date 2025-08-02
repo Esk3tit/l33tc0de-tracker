@@ -3,11 +3,11 @@ import { IoClose } from 'react-icons/io5';
 import ProblemSetAccordionList from '../ProblemSetAccordionList/ProblemSetAccordionList';
 import useCloseModal from '@/hooks/useCloseModal';
 
-type sideNavProblemSetsModalProps = {
+type SideNavProblemSetsModalProps = {
     
 };
 
-const sideNavProblemSetsModal:React.FC<sideNavProblemSetsModalProps> = () => {
+const SideNavProblemSetsModal:React.FC<SideNavProblemSetsModalProps> = () => {
     
     const closeModal = useCloseModal();
 
@@ -32,7 +32,7 @@ const sideNavProblemSetsModal:React.FC<sideNavProblemSetsModalProps> = () => {
         </>
     )
 }
-export default sideNavProblemSetsModal;
+export default SideNavProblemSetsModal;
 
 // const LoadingSkeleton = () => {
 // 	return (
