@@ -91,7 +91,7 @@ const Login:React.FC<LoginProps> = () => {
             </a>
         </button>
         <div className='text-sm font-medium text-gray-300'>
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <a href='#' className='text-blue-700 hover:underline' onClick={() => handleClick('register')}>
                 Create account
             </a>
