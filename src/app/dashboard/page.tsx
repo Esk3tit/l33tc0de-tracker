@@ -4,11 +4,12 @@ import useGetUserData from '@/hooks/useGetUserData';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { firestore } from "@/firebase/firebase";
+import { auth, firestore } from "@/firebase/firebase";
 import { collection, doc, getDocs, query, setDoc, where, writeBatch } from "firebase/firestore";
 import UsersTable from '@/components/UsersTable/UsersTable';
 import { ModifiedUserRoles, UserRole } from '@/utils/types/user';
 import Topbar from '@/components/Topbar/Topbar';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 type DashboardProps = {
     
@@ -29,6 +30,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
     });
 
     const { role, userRoles, currUserRoles, setCurrUserRoles, loading, refetch, userLoading } = useGetUserRoles();
+    const [user] = useAuthState(auth);
 
     const handleRoleChange = (idx: number, newRole: string) => {
         // Update the current user roles with modified user roles
@@ -81,7 +83,7 @@ const Dashboard: React.FC<DashboardProps> = () => {
 
     return (
         <main className='bg-dark-layer-2 min-h-screen'>
-            <Topbar adminOnlyPage />
+            <Topbar adminOnlyPage user={user} />
             {role === 'admin' ? (
                 <div className='flex flex-col items-center justify-center h-full'>
                     <h1 className='text-3xl font-bold text-white'>Dashboard</h1>

@@ -52,7 +52,7 @@ const Playground:React.FC<PlaygroundProps> = ({ problem, setSuccess, solved, ref
     const generateDefaultTab = () => {
         const newTab = {
             id: uuidv4(),
-            title: "New New Solution (1)",
+            title: "New Solution (1)",
             code: problem.starterCode,
             deleted: false,
             timestamp: Date.now()

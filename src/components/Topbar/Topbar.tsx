@@ -3,8 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/firebase/firebase';
 import Logout from '../Buttons/Logout';
 import { useSetRecoilState } from 'recoil';
 import { authModalState } from '@/atoms/authModalAtom';
@@ -17,15 +15,16 @@ import { Problem } from '@/utils/types/problem';
 import useGetUserData from '@/hooks/useGetUserData';
 import { problemSets } from '@/data/problemSets';
 import { sideNavProblemSetsState } from '@/atoms/sideNavProblemSets';
+import { User } from 'firebase/auth';
 
 type TopbarProps = {
     problemPage?: boolean;
     adminOnlyPage?: boolean;
+    user?: User | null;
 };
 
-const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
+const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage, user }) => {
 
-    const [user] = useAuthState(auth);
     const { role } = useGetUserData();
 
     const setAuthModalState = useSetRecoilState(authModalState);
@@ -141,7 +140,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
                             <Logout adminOnlyPage={adminOnlyPage} />
                         </>
                     ) : (
-                        <Link href='/auth' onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true, mode: "login" }))}>
+                        <Link href='/' onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true, mode: "login" }))}>
                             <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Sign In</button>
                         </Link>
                     )}
