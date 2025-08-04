@@ -59,7 +59,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage, user }) => 
             <div className={`flex w-full items-center justify-between ${!problemPage ? "mx-auto" : ""}`}>
                 <div className='flex justify-between w-[300px]'>
                     <Link href='/' className='flex-1'>
-                        <Image src='/steamhappy.png' alt='Logo' height={75} width={75} />
+                        <Image src='/topbar-logo-night-mode.svg' alt='Logo' height={250} width={250} />
                     </Link>
                     {problemPage && (
                         <button
