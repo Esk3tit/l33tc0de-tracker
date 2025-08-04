@@ -8,7 +8,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { authModalState } from "@/atoms/authModalAtom";
 import AuthModal from "@/components/Modals/AuthModal";
-import { useRouter } from "next/navigation";
 
 export default function Home() {
 
@@ -20,7 +19,7 @@ export default function Home() {
     if (user) {
       setAuthModalState((prev) => ({ ...prev, isOpen: false }));
     }
-  }, [user]);
+  }, [user, setAuthModalState]);
 
   return (
     <main className="bg-dark-layer-2 min-h-screen">
