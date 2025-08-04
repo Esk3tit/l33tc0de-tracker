@@ -3,8 +3,6 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '@/firebase/firebase';
 import Logout from '../Buttons/Logout';
 import { useSetRecoilState } from 'recoil';
 import { authModalState } from '@/atoms/authModalAtom';
@@ -17,15 +15,16 @@ import { Problem } from '@/utils/types/problem';
 import useGetUserData from '@/hooks/useGetUserData';
 import { problemSets } from '@/data/problemSets';
 import { sideNavProblemSetsState } from '@/atoms/sideNavProblemSets';
+import { User } from 'firebase/auth';
 
 type TopbarProps = {
     problemPage?: boolean;
     adminOnlyPage?: boolean;
+    user?: User | null;
 };
 
-const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
+const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage, user }) => {
 
-    const [user] = useAuthState(auth);
     const { role } = useGetUserData();
 
     const setAuthModalState = useSetRecoilState(authModalState);
@@ -60,7 +59,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
             <div className={`flex w-full items-center justify-between ${!problemPage ? "mx-auto" : ""}`}>
                 <div className='flex justify-between w-[300px]'>
                     <Link href='/' className='flex-1'>
-                        <Image src='/steamhappy.png' alt='Logo' height={75} width={75} />
+                        <Image src='/topbar-logo-night-mode.svg' alt='Logo' height={250} width={250} />
                     </Link>
                     {problemPage && (
                         <button
@@ -141,7 +140,7 @@ const Topbar: React.FC<TopbarProps> = ({ problemPage, adminOnlyPage }) => {
                             <Logout adminOnlyPage={adminOnlyPage} />
                         </>
                     ) : (
-                        <Link href='/auth' onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true, mode: "login" }))}>
+                        <Link href='/' onClick={() => setAuthModalState((prev) => ({ ...prev, isOpen: true, mode: "login" }))}>
                             <button className='bg-dark-fill-3 py-1 px-2 cursor-pointer rounded'>Sign In</button>
                         </Link>
                     )}
