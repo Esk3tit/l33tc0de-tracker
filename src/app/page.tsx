@@ -15,13 +15,12 @@ export default function Home() {
   const [user] = useAuthState(auth);
   const setAuthModalState = useSetRecoilState(authModalState);
   const authModal = useRecoilValue(authModalState);
-  const router = useRouter();
 
   useEffect(() => {
     if (user) {
       setAuthModalState((prev) => ({ ...prev, isOpen: false }));
     }
-  }, [user, router]);
+  }, [user]);
 
   return (
     <main className="bg-dark-layer-2 min-h-screen">
